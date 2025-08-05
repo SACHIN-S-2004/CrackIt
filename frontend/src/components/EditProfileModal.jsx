@@ -92,7 +92,7 @@ const UpdateProfileModal = ({ show, onClose, onNotify, source }) => {
     try {
     if(source=="profile"){
         if (validateProfile()) {
-            res=await axios.post("http://localhost:3000/user/updateProfile", form1);
+            res=await axios.post("https://crackit-01.onrender.com/user/updateProfile", form1);
             onNotify("Update Successful!", "Enjoy learning...");
             setForm1({ Fname: '', Lname: '', email: '', phone: '' });
 
@@ -105,7 +105,7 @@ const UpdateProfileModal = ({ show, onClose, onNotify, source }) => {
     }
     else{
         if (validatePass()) {
-            res=await axios.post("http://localhost:3000/user/changePassword", form2);
+            res=await axios.post("https://crackit-01.onrender.com/user/changePassword", form2);
             onNotify("Update Successful!", "Enjoy learning...");
             setForm2({ email: '', password: '', confirmPassword: '' });
 

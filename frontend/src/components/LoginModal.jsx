@@ -43,7 +43,7 @@ const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
 
     if (validate()) {
       try {
-        const res=await axios.post("http://localhost:3000/user/login", formData);
+        const res=await axios.post("https://crackit-01.onrender.com/user/login", formData);
         //onNotify("Login Successful!");
         console.log("🎉 Login Successful!", formData);
 

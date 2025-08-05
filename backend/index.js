@@ -25,7 +25,9 @@ app.listen(PORT, () => {
   //console.log('✅ MongoDB connected');
 });
 
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
   res.status(200).json({message: "Hello, World! This is the backend server."});
     //res.send('Hello, World! This is the backend server.');
-});
+});*/
+
+app.get("/", (req, res) => res.status(200).send("server is running!"));

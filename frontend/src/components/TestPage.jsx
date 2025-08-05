@@ -101,7 +101,7 @@ const TestPage = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/question/get?id=${testId}`);
+        const res = await axios.get(`https://crackit-01.onrender.com/question/get?id=${testId}`);
         setTimeout(() => {
           setQuestions(res.data.questions);
           setPackInfo(res.data.packInfo);
@@ -219,7 +219,7 @@ const TestPage = () => {
 
       console.log("Submitting payload:", resultPayload);
 
-      const response = await axios.post('http://localhost:3000/result/store', resultPayload, {
+      const response = await axios.post('https://crackit-01.onrender.com/result/store', resultPayload, {
         headers: {
           'Content-Type': 'application/json'
         }

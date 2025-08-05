@@ -93,7 +93,7 @@ const TestDifficulty = () => {
   const [selectedTestIndex, setSelectedTestIndex] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/question/getList?topic=${topic}`)
+    axios.get(`https://crackit-01.onrender.com/question/getList?topic=${topic}`)
       .then(res => {
         setTestList(res.data.questions);
         setLoading(false);

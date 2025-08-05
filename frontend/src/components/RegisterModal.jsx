@@ -46,7 +46,7 @@ const RegistrationModal = ({ show, onClose, ShowLogin, onNotify }) => {
 
     if (validate()) {
       try {
-        await axios.post("http://localhost:3000/user/register", form);
+        await axios.post("https://crackit-01.onrender.com/user/register", form);
         onNotify("Registration Successful!", "Please login...");
         setForm({ Fname: '', Lname: '', email: '', password: '', confirmPassword: '', phone: '' });
         setErrors({});

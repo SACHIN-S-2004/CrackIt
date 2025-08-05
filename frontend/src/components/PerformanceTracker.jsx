@@ -31,7 +31,7 @@ const PerformanceTracker = () => {
     const fetchPerformance = async () => {
       try {
         const user = JSON.parse(localStorage.getItem('user'));
-        const res = await axios.get(`http://localhost:3000/result/user/${user.email}`);
+        const res = await axios.get(`https://crackit-01.onrender.com/result/user/${user.email}`);
 
         // Group by topic
         const grouped = {};
