@@ -1,0 +1,397 @@
+/* Dark Mode Variables */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --card-bg: #ffffff;
+  --navbar-bg: #ffffff;
+  --hero-overlay: rgba(255, 255, 255, 0.6);
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Updated Dark Mode Variables for better readability */
+.dark-mode {
+  --bg-primary: #1a1a1a;      /* Slightly lighter than #121212 */
+  --bg-secondary: #242424;    /* Slightly lighter than #1e1e1e */
+  --bg-tertiary: #353535;     /* Slightly lighter than #2d2d2d */
+  --text-primary: #f8f9fa;    /* Slightly softer than pure white */
+  --text-secondary: #c9c9c9;  /* Better contrast than #b3b3b3 */
+  --text-muted: #a0a0a0;      /* More readable than #8e8e8e */
+  --border-color: #4a4a4a;    /* Lighter borders */
+  --card-bg: #242424;         /* Consistent with bg-secondary */
+  --navbar-bg: #1f1f1f;       /* Slightly lighter navbar */
+  --hero-overlay: rgba(0, 0, 0, 0.6); /* Less intense overlay */
+  --shadow: rgba(0, 0, 0, 0.4);
+}
+
+/* Global Dark Mode Styles */
+.dark-mode {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .bg-white {
+  background-color: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .bg-light {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .text-dark {
+  color: var(--text-primary) !important;
+}
+
+/* Improve visibility of test details list 
+.dark-mode .text-muted {
+  color: var(--text-secondary) !important; Use secondary instead of muted
+}*/
+
+/* Navbar Dark Mode */
+.dark-mode .navbar {
+  background-color: var(--navbar-bg) !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dark-mode .nav-link {
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .nav-link:hover {
+  color: #3B82F6 !important;
+}
+
+/* Cards Dark Mode */
+.dark-mode .card {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .card:hover {
+  box-shadow: 0 0.5rem 1rem var(--shadow) !important;
+}
+
+/* Buttons Dark Mode */
+.dark-mode .btn-outline-primary {
+  border-color: #3B82F6;
+  color: #3B82F6;
+}
+
+.dark-mode .btn-outline-primary:hover {
+  background-color: #3B82F6;
+  color: white;
+}
+
+.dark-mode .btn-outline-secondary {
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.dark-mode .btn-outline-secondary:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* Hero Section Dark Mode */
+.dark-mode .hero-section .overlay {
+  background-color: var(--hero-overlay) !important;
+}
+
+/* Footer Dark Mode */
+.dark-mode .footer {
+  background-color: #0d1117 !important;
+}
+
+/* Forms Dark Mode */
+.dark-mode .form-control {
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .form-control:focus {
+  background-color: var(--bg-secondary) !important;
+  border-color: #3B82F6 !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25) !important;
+}
+
+.dark-mode .form-control::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* Modal Dark Mode */
+.dark-mode .modal-content {
+  background-color: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark-mode .modal-header {
+  border-bottom-color: var(--border-color) !important;
+}
+
+.dark-mode .modal-footer {
+  border-top-color: var(--border-color) !important;
+}
+
+/* Badge improvements in dark mode */
+.dark-mode .badge {
+  font-weight: 500;
+}
+
+.dark-mode .badge-success {
+  background-color: #20c997 !important;
+  color: #000 !important;
+}
+
+.dark-mode .badge-warning {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+}
+
+.dark-mode .badge-danger {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+}
+/* Test Page Dark Mode 
+.dark-mode .badge-success {
+  background-color: #198754 !important;
+}
+
+.dark-mode .badge-warning {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.dark-mode .badge-danger {
+  background-color: #dc3545 !important;
+}*/
+
+/* Spinner Dark Mode */
+.dark-mode .spinner-border {
+  color: #3B82F6 !important;
+}
+
+/* Dropdown Dark Mode */
+.dark-mode .dropdown-menu {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark-mode .dropdown-item {
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .dropdown-item:hover {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Alert Dark Mode */
+.dark-mode .alert-warning {
+  background-color: #664d03 !important;
+  border-color: #b08d00 !important;
+  color: #ffecb5 !important;
+}
+
+.dark-mode .alert-success {
+  background-color: #0f5132 !important;
+  border-color: #0a3622 !important;
+  color: #d1eddf !important;
+}
+
+/* Progress Bar Dark Mode */
+.dark-mode .progress {
+  background-color: var(--bg-tertiary) !important;
+}
+
+/* Icon Boxes Dark Mode */
+.dark-mode .icon-box {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.dark-mode .category-card:hover .icon-box {
+  background-color: #3B82F6 !important;
+  color: #fff !important;
+}
+
+/* Blockquote Dark Mode */
+.dark-mode .blockquote {
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .blockquote-footer {
+  color: var(--text-muted) !important;
+}
+
+/* Toggle Button Styles */
+.dark-mode-toggle {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.dark-mode-toggle:hover {
+  background-color: var(--bg-tertiary);
+  transform: scale(1.1);
+}
+
+.dark-mode-toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+/* Animation for icon transition */
+.dark-mode-toggle i {
+  transition: transform 0.3s ease;
+}
+
+.dark-mode-toggle:hover i {
+  transform: rotate(180deg);
+}
+
+.dark-mode .card-body strong {
+  color: var(--text-primary) !important;
+  font-weight: 600;
+}
+
+/* Improve visibility of test details list */
+.dark-mode .text-muted {
+  color: var(--text-secondary) !important; /* Use secondary instead of muted */
+}
+
+/* Specific styling for test details lists */
+.dark-mode ul.text-muted li {
+  color: var(--text-secondary) !important;
+  margin-bottom: 0.25rem;
+}
+
+/* Ensure card text is properly styled */
+.dark-mode .card .text-muted {
+  color: var(--text-secondary) !important;
+}
+
+/* LoginModal Dark Mode Fixes */
+
+/* Login card background */
+.dark-mode .login-card {
+  background-color: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Input fields in login modal */
+.dark-mode .input-field {
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .input-field:focus {
+  background-color: var(--bg-secondary) !important;
+  border-color: #3B82F6 !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+}
+
+.dark-mode .input-field::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* Input icons */
+.dark-mode .input-icon {
+  color: var(--text-secondary) !important;
+}
+
+/* Password toggle button */
+.dark-mode .password-toggle {
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .password-toggle:hover {
+  color: var(--text-primary) !important;
+}
+
+/* Login button */
+.dark-mode .login-btn {
+  background-color: #3B82F6 !important;
+  border-color: #3B82F6 !important;
+}
+
+.dark-mode .login-btn:hover {
+  background-color: #2563EB !important;
+  border-color: #2563EB !important;
+}
+
+/* Error styling */
+.dark-mode .input-group.error .input-field {
+  border-color: #dc3545 !important;
+}
+
+.dark-mode .error-message {
+  color: #ff6b6b !important;
+}
+
+/* Form options (remember me, forgot password) */
+.dark-mode .form-options {
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .form-options a {
+  color: #3B82F6 !important;
+}
+
+.dark-mode .form-options a:hover {
+  color: #2563EB !important;
+}
+
+/* Register link */
+.dark-mode .register-link {
+  color: var(--text-secondary) !important;
+}
+
+/* Subheading */
+.dark-mode .subheading {
+  color: var(--text-muted) !important;
+}
+
+/* Alert styling in login */
+.dark-mode .alert-danger {
+  background-color: #721c24 !important;
+  border-color: #842029 !important;
+  color: #f8d7da !important;
+}
+
+.dark-card .box-text h4 {
+  color: var(--text-primary) !important;
+}
+
+.dark-card {
+  background-color: var(--card-bg) !important;
+}
+
+.dark-mode .dark-card {
+  border: 1px solid rgba(255, 255, 255, 0.279) !important;
+  background-color: var(--card-bg) !important;
+}
+
+.dark-mode .dark-card:hover {
+  border-color: rgba(255, 255, 255, 0.468) !important;
+}

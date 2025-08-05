@@ -1,0 +1,36 @@
+/* TestPage.css */
+
+.card {
+  border-radius: 12px;
+}
+
+.btn {
+  min-width: 44px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.badge-danger.pulse {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+  }
+}
+.bg-success {
+  background-color: #28a745 !important;
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
+}

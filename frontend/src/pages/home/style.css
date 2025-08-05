@@ -1,0 +1,176 @@
+/* Reset global padding for app wrapper */
+.app-wrapper {
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove left-right margin on container if needed */
+.container,
+.container-fluid {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Logo fix */
+.logo-img.no-vertical-padding {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: -6px;
+  margin-bottom: -6px;
+  height: 40px;
+}
+
+/* Rounded button style */
+.rounded-button {
+  border-radius: 8px !important;
+}
+
+/* Hero background image */
+.hero-section {
+  min-height: 100vh;
+  position: relative;
+  padding-top: 6rem;
+}
+
+
+.hero-section .overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.4);
+  /*background-color: rgba(255, 255, 255, 0.6);*/
+  z-index: 1;
+}
+
+.hero-section .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Icon box inside cards */
+.icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.category-card:hover .icon-box {
+  background-color: #3B82F6;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+/* Matching box look for all */
+.card {
+  border-radius: 16px !important;
+  border: 1px solid #eaeaea !important;
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.08);
+}
+
+/* Call-to-action styles */
+.call-to-action {
+  background: linear-gradient(to bottom right, #3B82F6, #8B5CF6);
+}
+
+/* Social icons in footer */
+.social-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #212529;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.social-icon:hover {
+  background-color: #3B82F6;
+}
+
+/* Full-width footer text links */
+.footer-link {
+  color: #adb5bd;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+}
+
+.text-blue-100 {
+  color: #cfe0ff;
+}
+
+/* Hover effect for CTA button */
+.hover-scale:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+/* Make testimonial cards more visually aligned */
+.rounded-4 {
+  border-radius: 1rem !important;
+}
+
+/* Subtle background to simulate bg-gray-50 */
+.bg-light {
+  background-color: #f9fafb !important;
+}
+
+/* Control image spacing and fix for object-fit */
+.object-fit-cover {
+  object-fit: cover;
+}
+
+.dropdown-item.text-white:hover {
+  background-color: #1e87d0; /* Slightly darker shade for hover */
+  color: #ffee00 !important;
+}
+
+.navbar-brand {
+  font-size: 1.0rem;
+}
+
+.nav-link {
+  font-size: 1.0rem;
+  margin-left: 20px;
+  transition: color 0.3s ease;
+  color: #ffffff;
+}
+
+.nav-link:hover {
+  color: #ebe700 !important;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.navbar-nav .nav-item {
+  opacity: 0;
+  animation: slideInRight 0.6s forwards;
+}
+
+.navbar-nav .nav-item:nth-child(1) { animation-delay: 0.1s; }
+.navbar-nav .nav-item:nth-child(2) { animation-delay: 0.2s; }
+.navbar-nav .nav-item:nth-child(3) { animation-delay: 0.3s; }
+.navbar-nav .nav-item:nth-child(4) { animation-delay: 0.4s; }
+
