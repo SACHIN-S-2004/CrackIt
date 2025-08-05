@@ -1,6 +1,6 @@
 import React, { useState, forwardRef } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {useDarkMode} from '../../components/DarkMode';
 import RegistrationModal from '../../components/RegisterModal';
 import UpdateProfileModal from '../../components/EditProfileModal';
@@ -81,9 +81,9 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-md bg-white fixed-top shadow-sm p-2">
       <div className="container px-2 px-md-2">
-        <a className="navbar-brand d-flex align-items-center logo-wrapper" href="#">
+        <Link className="navbar-brand d-flex align-items-center logo-wrapper" to="/">
           <img src="/CrackItPNG2.png" alt="Logo" className="logo-img no-vertical-padding" />
-        </a>
+        </Link>
         {/* LOGO CONTAINER */}
 
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
@@ -95,10 +95,16 @@ const Navbar = () => {
           {/*((localStorage.getItem('token'))!="null")*/isAuthenticated?(
           <div className="collapse navbar-collapse" id="navbarMenu">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-md-4">
-                <li className="nav-item"><a className="nav-link text-dark" href="/">Home</a></li>
-                <li className="nav-item"><Link className="nav-link text-dark" to="/aptitude-tests">Tests</Link></li>
+                <li className="nav-item">
+                  <Link className="nav-link text-dark" to="/">Home</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link text-dark" to="/aptitude-tests">Tests</Link>
+                </li>
                 <li className="nav-item"><a type="button" className="nav-link text-dark" onClick={() => setShowCSoonModal(true)}>Resources</a></li>
-                <li className="nav-item"><a className="nav-link text-dark" href="#">About</a></li>
+                <li className="nav-item">
+                  <Link className="nav-link text-dark" to="/about">About</Link>
+                </li>
               </ul>
               {/* Dark Mode Toggle */}
               <button 
