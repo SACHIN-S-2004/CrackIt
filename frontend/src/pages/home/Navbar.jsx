@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {useDarkMode} from '../../components/DarkMode';
 import RegistrationModal from '../../components/RegisterModal';
 import UpdateProfileModal from '../../components/EditProfileModal';
-import LoginModal from '../../components/LoginModal';
+import LoginModal from '../../components/loginModal';
 import Notify from '../../components/onNotify';
 import useAuthStore from '../../components/userToken';
 import ComingSoonModal from '../../components/ComingSoonModal';
@@ -96,11 +96,10 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarMenu">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-md-4">
                 <li className="nav-item"><a className="nav-link text-dark" href="/">Home</a></li>
-                <li className="nav-item"><a className="nav-link text-dark" href="/aptitude-tests">Tests</a></li>
+                <li className="nav-item"><Link className="nav-link text-dark" to="/aptitude-tests">Tests</Link></li>
                 <li className="nav-item"><a type="button" className="nav-link text-dark" onClick={() => setShowCSoonModal(true)}>Resources</a></li>
                 <li className="nav-item"><a className="nav-link text-dark" href="#">About</a></li>
               </ul>
-
               {/* Dark Mode Toggle */}
               <button 
                 className="dark-mode-toggle me-3"
