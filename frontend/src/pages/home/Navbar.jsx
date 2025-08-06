@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import {useDarkMode} from '../../components/DarkMode';
 import RegistrationModal from '../../components/RegisterModal';
 import UpdateProfileModal from '../../components/EditProfileModal';
-import LoginModal from '../../components/loginModal';
+import LoginModal from '../../components/LoginModal';
 import Notify from '../../components/onNotify';
 import useAuthStore from '../../components/userToken';
 import ComingSoonModal from '../../components/ComingSoonModal';

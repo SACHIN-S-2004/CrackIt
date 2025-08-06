@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import LoginModal from '../../components/loginModal';
+import LoginModal from '../../components/LoginModal';
 import RegistrationModal from '../../components/RegisterModal';
 import Notify from '../../components/onNotify';
 import { useDarkMode } from '../../components/DarkMode';
