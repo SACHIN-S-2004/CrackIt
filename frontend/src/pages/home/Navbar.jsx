@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, useEffect } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
 import {useDarkMode} from '../../components/DarkMode';
@@ -77,6 +77,12 @@ const Navbar = () => {
       {children}
     </div>
   ));
+
+  useEffect(() => {
+    const handleOpenLogin = () => setShowLogin(true);
+    window.addEventListener('openLoginModal', handleOpenLogin);
+    return () => window.removeEventListener('openLoginModal', handleOpenLogin);
+  }, []);
 
   return (
     <nav className="navbar navbar-expand-md bg-white fixed-top shadow-sm p-2">

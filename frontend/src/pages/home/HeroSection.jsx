@@ -1,41 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from "react-router-dom";
-import LoginModal from '../../components/LoginModal';
-import RegistrationModal from '../../components/RegisterModal';
-import Notify from '../../components/onNotify';
 import { useDarkMode } from '../../components/DarkMode';
+import useAuthStore from '../../components/userToken'; // Add this
 import './style.css';
 
 const HeroSection = () => {
-  const [showRegister, setShowRegister] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [notifyMessage1, setNotifyMessage1] = useState("");
-  const [notifyMessage2, setNotifyMessage2] = useState("");
-
   const { isDarkMode } = useDarkMode();
-
+  const { isAuthenticated } = useAuthStore(); // Add this
   const navigate = useNavigate();
 
   function loginVerify(){
-    const token = localStorage.getItem('token');
-
-    if (!token || token=== "null" || token === undefined || token === "") {
-      setShowLogin(true);      
+    if (!isAuthenticated) {
+      // Trigger navbar login modal
+      window.dispatchEvent(new CustomEvent('openLoginModal'));
       return;
-    }
-    else{
+    } else {
       navigate('/aptitude-tests');
     }
   }
-  const handleNotify = (message ,message2) => {
-    setNotifyMessage1(message);
-    setNotifyMessage2(message2)
-  };
-
-  const handleNotifyClose = () => {
-    setNotifyMessage1("");
-    setNotifyMessage2("");
-  };
 
   return (
     <>
@@ -63,7 +45,9 @@ const HeroSection = () => {
                 Master aptitude tests with our comprehensive platform featuring personalized learning paths, real-time analytics, and thousands of practice questions designed by experts.
               </p>
               <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
-                <button className="btn btn-primary px-4 py-3 fs-5 rounded-button" onClick={loginVerify}>Start Practicing</button>
+                <button className="btn btn-primary px-4 py-3 fs-5 rounded-button" onClick={loginVerify}>
+                  {isAuthenticated ? 'Start Practicing' : 'Login to Start'}
+                </button>
                 <button
                   className="btn btn-outline-primary px-4 py-3 fs-5 rounded-button"
                   onClick={() => document.getElementById('test-categories').scrollIntoView({ behavior: 'smooth' })}
@@ -75,28 +59,9 @@ const HeroSection = () => {
           </div>
         </div>
       </section>
-        <LoginModal show={showLogin} onClose={() => setShowLogin(false)} 
-        ShowRegister={() => {
-          setShowLogin(false);
-          setShowRegister(true);
-        }}
-        onNotify={handleNotify}
-      />
-      <RegistrationModal show={showRegister} onClose={() => setShowRegister(false)}
-        ShowLogin={() => {
-          setShowRegister(false);
-          setShowLogin(true);
-        }}
-        onNotify={handleNotify}
-      />
-      {notifyMessage1 && notifyMessage2 && (
-        <Notify
-          message={notifyMessage1}
-          message2={notifyMessage2}
-          onClose={handleNotifyClose}
-          onShowLogin={() => setShowLogin(true)}
-        />
-      )}
+
+      {/* Remove all modal components - they're handled by Navbar */}
+      
       <section className="py-5 bg-light">
         <div className="container text-center">
           <h2 className="fw-bold mb-4">Why Choose CrackIt?</h2>
@@ -129,7 +94,5 @@ const HeroSection = () => {
     </>
   );
 };
-
-
 
 export default HeroSection;
