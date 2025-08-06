@@ -21,7 +21,7 @@ app.use('/result', resultRoutes); // Use the result routes under the /result pat
 connectDB(); // Connect to the database
 
 app.listen(PORT, () => {
-  console.log('Server is running : http://localhost:3000 ✅✅');
+  console.log('✅✅ Server is running : http://localhost:3000');
   //console.log('✅ MongoDB connected');
 });
 

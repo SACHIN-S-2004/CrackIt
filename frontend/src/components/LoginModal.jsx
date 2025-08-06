@@ -42,6 +42,7 @@ const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
     e.preventDefault();
 
     if (validate()) {
+      setLoading(true);
       try {
         //const res=await axios.post("https://localhost:3000/user/login", formData);
         const res=await axios.post("https://crackit-01.onrender.com/user/login", formData);
@@ -73,6 +74,9 @@ const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
           //onNotify("Login Failed!");
           setErrors({ general: 'An unexpected error occurred. Please try again later.' });
         }  
+      }
+      finally{
+        setLoading(false);
       }
     }
   };
@@ -147,8 +151,15 @@ const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
                 </div>
             )}
           {/* Submit */}
-          <button type="submit" className="login-btn">
-            {loading ? <div className="spinner"></div> : <span className="btn-text">Login</span>}
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? (
+              <>
+                Logging in...
+                <span className="spinner-ring" />
+              </>
+            ) : (
+              <span className="btn-text">Login</span>
+            )}
           </button>
         </form>
 

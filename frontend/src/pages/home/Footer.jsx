@@ -31,7 +31,7 @@ const Footer = () => {
             <p className="p-2 text-white-50">Subscribe to our newsletter for the latest updates and study tips.</p>
             <div className="d-flex">
               <input type="email" placeholder="Enter your email" className="form-control rounded-button" />
-              <button className="btn btn-primary ms-2 rounded-button">Subscribe</button>
+              <button className="btn btn-primary ms-2 rounded-button custom-bttn" >Subscribe</button>
             </div>
           </div>
         </div>

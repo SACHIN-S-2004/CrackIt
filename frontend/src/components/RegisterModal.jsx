@@ -45,6 +45,7 @@ const RegistrationModal = ({ show, onClose, ShowLogin, onNotify }) => {
     e.preventDefault();
 
     if (validate()) {
+      setSubmitting(true);
       try {
         await axios.post("https://crackit-01.onrender.com/user/register", form);
         onNotify("Registration Successful!", "Please login...");
@@ -59,6 +60,9 @@ const RegistrationModal = ({ show, onClose, ShowLogin, onNotify }) => {
           console.error("⚠️ Registration error:", error.message);
           onClose();
         }
+      }
+      finally{
+        setSubmitting(false);
       }
     }
     
@@ -169,7 +173,14 @@ const RegistrationModal = ({ show, onClose, ShowLogin, onNotify }) => {
           {errors.terms && <div className="text-danger small mt-1">{errors.terms}</div>}
 
           <button type="submit" className="btn btn-primary w-100" disabled={submitting}>
-            {submitting ? 'Creating Account...' : 'Create Account'}
+            {submitting ? (
+              <>
+                Creating Account...
+                <span className="spinner-ring" />
+              </>
+            ) : (
+              'Create Account'
+            )}
           </button>
         </form>
 

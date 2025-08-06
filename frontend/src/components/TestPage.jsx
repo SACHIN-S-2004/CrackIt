@@ -272,7 +272,12 @@ const TestPage = () => {
               {score} <span className="text-muted">/ {questions.length}</span>
             </h2>
           </div>
+
         </motion.div>
+          <div className="text-center">
+            <Link to="/aptitude-tests" className="btn btn-primary mt-3 mb-4 me-2">Back to Categories</Link>
+            <Link to="/performance-tracker" className="btn btn-primary mt-3 mb-4">Progress History</Link>
+          </div>
         <Row>
           <Col md={8} className="mx-auto">
             {questions.map((q, index) => {
@@ -335,9 +340,11 @@ const TestPage = () => {
               );
             })}
 
-            
             <div className="text-center">
-              <Link to="/aptitude-tests" className="btn btn-primary mt-3">Back to Categories</Link>
+              <Link onClick={(e) => {
+                      e.preventDefault(); // prevents page reload
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }} className="btn btn-primary mt-3 mb-4">Go to Top</Link>
             </div>
           </Col>
         </Row>

@@ -108,9 +108,10 @@ const Navbar = () => {
                   <Link className="nav-link text-dark" to="/aptitude-tests">Tests</Link>
                 </li>
                 <li className="nav-item"><a type="button" className="nav-link text-dark" onClick={() => setShowCSoonModal(true)}>Resources</a></li>
-                <li className="nav-item">
-                  <Link className="nav-link text-dark" to="/about">About</Link>
-                </li>
+                {/*<li className="nav-item">
+                  <Link className="nav-link text-dark" to="/about" >About</Link>
+                </li>*/}
+                <li className="nav-item"><a type="button" className="nav-link text-dark" onClick={() => setShowCSoonModal(true)}>About</a></li>
               </ul>
               {/* Dark Mode Toggle */}
               <button 
