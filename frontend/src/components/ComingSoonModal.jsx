@@ -10,7 +10,7 @@ const ComingSoonModal = ({ show, onHide }) => {
         <div className="floating-emoji emoji-right">🚀</div>
 
         <h2 className="glow-text mb-3">Coming Soon</h2>
-        <p className="mb-4 text-muted fs-5">
+        <p className="mb-4 fs-5">
           We're working on something amazing. Stay tuned!
         </p>
 

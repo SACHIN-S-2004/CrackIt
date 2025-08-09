@@ -47,8 +47,9 @@ const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
         //const res=await axios.post("https://localhost:3000/user/login", formData);
         const res=await axios.post("https://crackit-01.onrender.com/user/login", formData);
         //onNotify("Login Successful!");
-        console.log("🎉 Login Successful!", formData);
-
+        //console.log("🎉 Login Successful!", formData);
+        console.log("🎉 Login Successful!");
+        
         const { token, user } = res.data;
         
         localStorage.setItem("user", JSON.stringify(user));

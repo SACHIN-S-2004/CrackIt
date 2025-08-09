@@ -2,7 +2,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Badge, Collapse, Spinner, Modal } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { FaChevronRight, FaChevronDown, FaStar } from 'react-icons/fa';
+import { FaChevronRight, FaChevronDown, FaStar, FaCheck } from 'react-icons/fa';
 import { useDarkMode } from './DarkMode';
 import axios from 'axios';
 import Navbar from '../pages/home/Navbar';
@@ -79,6 +79,7 @@ const testContent = {
 const TestDifficulty = () => {
 
   const {isDarkMode} = useDarkMode();
+  const [attendedTests, setAttendedTests] = useState([]);
 
   const { category, topic } = useParams();
   const navigate = useNavigate();
@@ -93,8 +94,11 @@ const TestDifficulty = () => {
   const [selectedTestIndex, setSelectedTestIndex] = useState(null);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+
     axios.get(`https://crackit-01.onrender.com/question/getList?topic=${topic}`)
       .then(res => {
+        //console.log(res.data.questions);
         setTestList(res.data.questions);
         setLoading(false);
 
@@ -109,6 +113,21 @@ const TestDifficulty = () => {
           setError('Failed to load tests. Please try again later.');
         }
       });
+
+      // Fetch attended test IDs
+      if (user?.email) {
+        axios.get(`https://crackit-01.onrender.com/result/user/${user.email}`)
+        /*axios.get(`http://localhost:3000/result/user/${user.email}`)*/
+          .then(res => {
+            //console.log('res.data:', res.data);
+            const attendedIds = res.data.results.map(result => result.id); // 'id' from your mapped controller output
+            //console.log('attendedIds:', attendedIds);
+            setAttendedTests(attendedIds);
+          })
+          .catch(err => {
+            console.error('Error fetching attended tests:', err);
+          });
+      }
   }, [topic]);
 
   const handleStartTest = (test, index) => {
@@ -238,19 +257,30 @@ const TestDifficulty = () => {
                     testList.map((test, index) => {
                       const isExpanded = expandedIndex === index;
                       const details = getTestDetails(test.difficulty);
+                      const isAttended = attendedTests.includes(test._id);
+                      //console.log('isAttended:', isAttended);
 
                       return (
-                        <Card key={test._id} className="mb-3 shadow-sm">
+                        <Card
+                          key={test._id}
+                          className={`mb-3 shadow-sm ${isAttended ? 'attended' : ''}`}
+                        >
                           {/*console.log(test)*/}
                           <Card.Body className="d-flex flex-column p-0">
                             <div className="d-flex justify-content-between align-items-center">                        
-                              <Button
-                                variant="link"
-                                onClick={() => setExpandedIndex(isExpanded ? null : index)}
-                                className="p-0 me-2"
-                              >
-                                {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
-                              </Button>
+                              {isAttended ? (
+                                <div className="p-0 me-2 text-success" style={{ fontSize: '1.2rem' }}>
+                                  <FaCheck />
+                                </div>
+                              ) : (
+                                <Button
+                                  variant="link"
+                                  onClick={() => setExpandedIndex(isExpanded ? null : index)}
+                                  className="p-0 me-2"
+                                >
+                                  {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
+                                </Button>
+                              )}
 
                               <div className="flex-grow-1">
                                 <strong>{test.topic} #{index+1}</strong>
@@ -266,7 +296,7 @@ const TestDifficulty = () => {
                               </div>
                             </div>
 
-                            <Collapse in={isExpanded}>
+                            <Collapse in={isExpanded && !isAttended}>
                               <div className="mt-3">
                                 <ul className="mb-0 text-muted ps-4">
                                   {details.map((point, idx) => (

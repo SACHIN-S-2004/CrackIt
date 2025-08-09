@@ -50,6 +50,7 @@ exports.getResult = async (req, res) => {
     const testResult = await TestResult.find({ email });
 
     const response = testResult.map(result => ({
+      id: result.qPackID,
       topic: result.topic,
       testName: result.testName,
       score: result.score,

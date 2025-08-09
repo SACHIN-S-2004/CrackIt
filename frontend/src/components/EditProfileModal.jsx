@@ -90,30 +90,44 @@ const UpdateProfileModal = ({ show, onClose, onNotify, source }) => {
 
     let res;
     try {
+    setSubmitting(true);
+    let token = localStorage.getItem("token");
     if(source=="profile"){
-        if (validateProfile()) {
-            res=await axios.post("https://crackit-01.onrender.com/user/updateProfile", form1);
-            onNotify("Update Successful!", "Enjoy learning...");
-            setForm1({ Fname: '', Lname: '', email: '', phone: '' });
+      if (validateProfile()) {
+        /*res=await axios.post("http://localhost:3000/user/updateProfile", form1, {*/
+        res=await axios.post("https://crackit-01.onrender.com/user/updateProfile", form1, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        onNotify("Update Successful!", "Enjoy learning...");
+        setForm1({ Fname: '', Lname: '', email: '', phone: '' });
 
-            const { user } = res.data;
-            localStorage.setItem("user", JSON.stringify(user));
+        const { user } = res.data;
+        localStorage.setItem("user", JSON.stringify(user));
 
-            setErrors({});
-            onClose();
-        }
+        setErrors({});
+        onClose();
+      }
     }
     else{
         if (validatePass()) {
-            res=await axios.post("https://crackit-01.onrender.com/user/changePassword", form2);
-            onNotify("Update Successful!", "Enjoy learning...");
-            setForm2({ email: '', password: '', confirmPassword: '' });
+          /*res=await axios.post("http://localhost:3000/user/changePassword", form2, {*/
+          res=await axios.post("https://crackit-01.onrender.com/user/changePassword", form2, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
+          });
+          onNotify("Update Successful!", "Enjoy learning...");
+          setForm2({ email: '', password: '', confirmPassword: '' });
 
-            const { user } = res.data;
-            localStorage.setItem("user", JSON.stringify(user));
+          const { user } = res.data;
+          localStorage.setItem("user", JSON.stringify(user));
 
-            setErrors({});
-            onClose();
+          setErrors({});
+          onClose();
         }
     }
 
@@ -130,6 +144,9 @@ const UpdateProfileModal = ({ show, onClose, onNotify, source }) => {
             console.error("⚠️ Updation error:", error.message);
             onClose();
         }
+    }
+    finally{
+      setSubmitting(false);
     }
   };
 
@@ -282,9 +299,9 @@ const UpdateProfileModal = ({ show, onClose, onNotify, source }) => {
           )}
           <button type="submit" className="btn btn-primary w-100" disabled={submitting}>
             {(source=="profile")?(
-                submitting ? 'Updating Account...' : 'Update Account'
+                submitting ? <>Updating Account... <span className="spinner-ring" /></>: 'Update Account'
             ):(
-                submitting ? 'Changing Password...' : 'Change Password'
+                submitting ? <>Changing Password... <span className="spinner-ring" /></>: 'Change Password'
             )}
           </button>
         </form>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, Button, Form, Badge } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Form, Badge, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useDarkMode } from './DarkMode';
@@ -9,7 +9,6 @@ import '../TestPage.css';
 const TestPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
   const { isDarkMode } = useDarkMode();
 
   const savedMeta = JSON.parse(localStorage.getItem('test_meta')) || {};
@@ -24,28 +23,27 @@ const TestPage = () => {
   const [packInfo, setPackInfo] = useState(null);
   const [showWarning, setShowWarning] = useState(false);
 
+  // Confirmation modal states
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [modalType, setModalType] = useState(null); // 'exit' or 'submit'
+
   const timerRef = useRef(null);
 
-  // Store metadata when test starts
   useEffect(() => {
     if (location.state) {
       localStorage.setItem('test_meta', JSON.stringify({ testId, topic, difficulty }));
     }
   }, [location.state]);
 
-  // Permanently disable back button
   useEffect(() => {
     const blockBack = () => {
       window.history.pushState(null, '', window.location.href);
     };
-
     window.history.pushState(null, '', window.location.href);
     window.addEventListener('popstate', blockBack);
-
     return () => window.removeEventListener('popstate', blockBack);
   }, []);
 
-  // Warn before page refresh
   useEffect(() => {
     const warnBeforeUnload = (e) => {
       e.preventDefault();
@@ -55,7 +53,6 @@ const TestPage = () => {
     return () => window.removeEventListener('beforeunload', warnBeforeUnload);
   }, []);
 
-  // Load saved progress
   useEffect(() => {
     const saved = localStorage.getItem(`test_${testId}`);
     if (saved) {
@@ -70,7 +67,6 @@ const TestPage = () => {
     }
   }, [testId, difficulty]);
 
-  // Countdown logic
   useEffect(() => {
     if (submitted) return;
     timerRef.current = setInterval(() => {
@@ -82,22 +78,18 @@ const TestPage = () => {
           localStorage.removeItem('test_meta');
           return 0;
         }
-
         localStorage.setItem(`test_${testId}`, JSON.stringify({
           timeLeft: prev - 1,
           userAnswers,
           status,
           currentQuestionIndex,
         }));
-
         return prev - 1;
       });
     }, 1000);
-
     return () => clearInterval(timerRef.current);
   }, [submitted, userAnswers, status, currentQuestionIndex]);
 
-  // Fetch questions
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -123,10 +115,8 @@ const TestPage = () => {
       setShowWarning(true);
       return;
     }
-
     setShowWarning(false);
     setStatus((prev) => ({ ...prev, [currentQuestionIndex]: 'answered' }));
-
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
@@ -140,71 +130,66 @@ const TestPage = () => {
     }
   };
 
-  const handleSubmit = () => {
-    clearInterval(timerRef.current);
-    setSubmitted(true);
-    localStorage.removeItem(`test_${testId}`);
-    localStorage.removeItem('test_meta');
-
-    submitResultToServer();
+  const handleEmergencyExit = () => {
+    setModalType('exit');
+    setShowConfirmModal(true);
   };
 
-  const handleEmergencyExit = () => {
-    const confirmed = window.confirm(
-      'This will end your test and clear all progress. Are you absolutely sure?'
-    );
-    if (confirmed) {
+  const handleSubmit = () => {
+    setModalType('submit');
+    setShowConfirmModal(true);
+  };
+
+  const confirmAction = () => {
+    setShowConfirmModal(false);
+    if (modalType === 'exit') {
       clearInterval(timerRef.current);
       localStorage.removeItem(`test_${testId}`);
       localStorage.removeItem('test_meta');
       navigate('/aptitude-tests', { replace: true });
-    }
-  };
-
-  const handleQuestionSelect = (index) => {
-    if (difficulty !== 'hard') {
-      setCurrentQuestionIndex(index);
-      setShowWarning(false);
+    } else if (modalType === 'submit') {
+      clearInterval(timerRef.current);
+      setSubmitted(true);
+      localStorage.removeItem(`test_${testId}`);
+      localStorage.removeItem('test_meta');
+      submitResultToServer();
     }
   };
 
   const calculateScore = () => {
+    if (!questions.length) return 0; // No questions loaded
     let score = 0;
     questions.forEach((q, idx) => {
+      if (!(idx in userAnswers)) return; // skipped/unanswered
       const selected = userAnswers[idx];
       const correct = q.options[q.ansIndex];
-      if (selected) {
-        if (selected === correct) score += 1;
-        else {
-          if (difficulty === 'medium') score -= 0.5;
-          if (difficulty === 'hard') score -= 1;
-        }
+      if (selected === correct) score += 1;
+      else {
+        if (difficulty === 'medium') score -= 0.5;
+        if (difficulty === 'hard') score -= 1;
       }
     });
     return score;
   };
 
+
   const submitResultToServer = async () => {
     try {
       const userData = JSON.parse(localStorage.getItem('user'));
       const email = userData?.email;
-
       if (!email || !testId || !questions.length) {
         console.error('Missing required data to submit result.');
         return;
       }
-
       const selectedOptions = questions.map((q, index) => {
         const selectedAnswer = userAnswers[index];
         const selectedIndex = q.options.findIndex(opt => opt === selectedAnswer);
         return selectedIndex !== -1 ? selectedIndex : "NA";
       });
-
       const correctOptions = questions.map((q) => q.ansIndex ?? "NA");
-
       const score = calculateScore();
       const total = questions.length;
-      const testName = topic+" #"+testIndex;
+      const testName = topic + " #" + testIndex;
 
       const resultPayload = {
         email,
@@ -217,12 +202,8 @@ const TestPage = () => {
         total
       };
 
-      console.log("Submitting payload:", resultPayload);
-
       const response = await axios.post('https://crackit-01.onrender.com/result/store', resultPayload, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/json' }
       });
 
       if (response.status === 201) {
@@ -235,8 +216,6 @@ const TestPage = () => {
     }
   };
 
-
-
   const formatTime = (secs) => {
     const m = Math.floor(secs / 60).toString().padStart(2, '0');
     const s = (secs % 60).toString().padStart(2, '0');
@@ -244,7 +223,6 @@ const TestPage = () => {
   };
 
   const current = questions[currentQuestionIndex];
-
   if (!current || !packInfo) {
     return (
       <Container className="py-5 text-center">
@@ -344,7 +322,8 @@ const TestPage = () => {
               <Link onClick={(e) => {
                       e.preventDefault(); // prevents page reload
                       window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }} className="btn btn-primary mt-3 mb-4">Go to Top</Link>
+                    }} 
+              className="btn btn-primary mt-3 mb-4">Go to Top</Link>
             </div>
           </Col>
         </Row>
@@ -359,15 +338,13 @@ const TestPage = () => {
         <div className="d-flex flex-column align-items-end">
           <Button
             variant="outline-danger"
-            size="sm"
-            className="mb-2"
+            size="md"
+            className="mb-2 p-2 mb-3 px-3"
             onClick={handleEmergencyExit}
-          >
-            ⚠️ Exit
-          </Button>
+          > Exit Test</Button>
           <Badge
             bg={timeLeft <= 120 ? 'danger' : 'success'}
-            className={`fs-5 px-3 py-2 rounded-pill ${timeLeft <= 120 ? 'pulse' : ''}`}
+            className={`fs-5 px-3 py-2 mt-4 rounded-pill ${timeLeft <= 120 ? 'pulse' : ''}`}
           >
             ⏳ {formatTime(timeLeft)}
           </Badge>
@@ -424,13 +401,12 @@ const TestPage = () => {
                 if (status[index] === 'answered') variant = 'success';
                 else if (status[index] === 'skipped') variant = 'danger';
                 if (index === currentQuestionIndex) variant = 'primary';
-
                 return (
                   <Button
                     key={index}
                     variant={variant}
                     className="m-1"
-                    onClick={() => handleQuestionSelect(index)}
+                    onClick={() => setCurrentQuestionIndex(index)}
                     disabled={difficulty === 'hard'}
                   >
                     {index + 1}
@@ -441,6 +417,37 @@ const TestPage = () => {
           </Card>
         </Col>
       </Row>
+
+      {/* Shared Confirmation Modal */}
+      <Modal
+        show={showConfirmModal}
+        onHide={() => setShowConfirmModal(false)}
+        centered
+        backdropClassName="custom-backdrop"
+        className={isDarkMode ? 'dark-mode' : ''}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {modalType === 'exit' ? 'Exit Test' : 'Submit Test'}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {modalType === 'exit'
+            ? 'This will end your test and clear all progress. Are you absolutely sure?'
+            : 'This action will lock your answers and complete the test. Proceed?'}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+            Cancel
+          </Button>
+          <Button
+            variant={modalType === 'exit' ? 'danger' : 'success'}
+            onClick={confirmAction}
+          >
+            {modalType === 'exit' ? 'Yes, Exit' : 'Yes, Submit'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

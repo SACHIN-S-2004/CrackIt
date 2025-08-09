@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './style.css';
+import ComingSoonModal from '../../components/ComingSoonModal';
 
 export function MFooter() {
   return (
@@ -10,7 +11,10 @@ export function MFooter() {
 }
 
 const Footer = () => {
+  const [showCSoonModal, setShowCSoonModal] = useState(false);
   return (
+    <>
+    <ComingSoonModal show={showCSoonModal} onHide={() => setShowCSoonModal(false)} /> 
     <footer className="footer bg-dark text-white pt-5 pb-3">
       <div className="container">
         <div className="row g-4 mb-4">
@@ -31,13 +35,14 @@ const Footer = () => {
             <p className="p-2 text-white-50">Subscribe to our newsletter for the latest updates and study tips.</p>
             <div className="d-flex">
               <input type="email" placeholder="Enter your email" className="form-control rounded-button" />
-              <button className="btn btn-primary ms-2 rounded-button custom-bttn" >Subscribe</button>
+              <button className="btn btn-primary ms-2 rounded-button custom-bttn" onClick={() => setShowCSoonModal(true)}>Subscribe</button>
             </div>
           </div>
         </div>
         <MFooter/>
       </div>
     </footer>
+    </>
   );
 };
 

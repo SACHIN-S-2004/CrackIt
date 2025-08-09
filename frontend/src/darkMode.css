@@ -28,6 +28,25 @@
   --shadow: rgba(0, 0, 0, 0.4);
 }
 
+/* Light mode attended card */
+.card.attended {
+  background-color: #d4edda !important; /* Light green */
+  border: 1px solid #c3e6cb !important;
+  color: #155724 !important;
+}
+
+/* Dark mode attended card */
+.dark-mode .card.attended {
+  background-color: #0f5132 !important; /* Dark green */
+  border: 1px solid #0a3622 !important;
+  color: #d1eddf !important;
+}
+
+/* Custom backdrop style for both dark and light modes */
+.custom-backdrop {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
 /* Global Dark Mode Styles */
 .dark-mode {
   background-color: var(--bg-primary) !important;
@@ -394,4 +413,55 @@
 
 .dark-mode .dark-card:hover {
   border-color: rgba(255, 255, 255, 0.468) !important;
+}
+
+/* Remove or comment out this rule in darkMode.css */
+/*
+body .modal-backdrop.show {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  opacity: 1 !important;
+}
+*/
+
+/* Add these new rules instead */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.35) !important;
+}
+
+.modal-backdrop.show {
+  opacity: 1 !important;
+}
+
+/* Slightly adjust for dark mode if needed */
+.dark-mode .modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Custom backdrop for test page */
+.custom-backdrop {
+  background-color: rgba(0, 0, 0, 0.35) !important;
+}
+
+.dark-mode .custom-backdrop {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Modal-specific fix - Override dark mode background when modal is open */
+body.modal-open .dark-mode {
+  background-color: transparent !important;
+}
+
+/* Alternative: Target the backdrop specifically for the modal issue */
+.modal-open .dark-mode .container,
+.modal-open .dark-mode .py-4 {
+  background-color: var(--bg-primary) !important;
+}
+
+/* Ensure modal backdrop works correctly */
+.modal-open .modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.35) !important;
+}
+
+.modal-open .dark-mode .modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.4) !important;
 }
