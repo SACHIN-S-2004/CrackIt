@@ -12,7 +12,7 @@ const TestPage = () => {
   const { isDarkMode } = useDarkMode();
 
   const savedMeta = JSON.parse(localStorage.getItem('test_meta')) || {};
-  const { testId, topic, difficulty, testIndex } = location.state || savedMeta;
+  const { testId, testName, topic, difficulty } = location.state || savedMeta;
 
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -31,7 +31,7 @@ const TestPage = () => {
 
   useEffect(() => {
     if (location.state) {
-      localStorage.setItem('test_meta', JSON.stringify({ testId, topic, difficulty }));
+      localStorage.setItem('test_meta', JSON.stringify({ testId, testName, topic, difficulty }));
     }
   }, [location.state]);
 
@@ -177,7 +177,7 @@ const TestPage = () => {
     try {
       const userData = JSON.parse(localStorage.getItem('user'));
       const email = userData?.email;
-      if (!email || !testId || !questions.length) {
+      if (!email || !testId || !testName || !questions.length) {
         console.error('Missing required data to submit result.');
         return;
       }
@@ -189,7 +189,7 @@ const TestPage = () => {
       const correctOptions = questions.map((q) => q.ansIndex ?? "NA");
       const score = calculateScore();
       const total = questions.length;
-      const testName = topic + " #" + testIndex;
+      //const testName = topic + " #" + testIndex;
 
       const resultPayload = {
         email,
@@ -207,7 +207,8 @@ const TestPage = () => {
       });
 
       if (response.status === 201) {
-        console.log("✅ Result submitted successfully", response.data);
+        console.log("✅ Result submitted successfully");
+        /*console.log("✅ Result submitted successfully", response.data);*/
       } else {
         console.error("❌ Unexpected response from server:", response);
       }

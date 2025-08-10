@@ -78,14 +78,26 @@ exports.postQuestion = async (req, res) => {
 
     if(difficulty == "easy" || difficulty == "medium"){
       if (!latestPack || latestPack.questions.length >= 10) {
-        latestPack = new QuestionPack({ topic, difficulty, questions: [newQuestion._id] });
+
+        let lastNumber = latestPack?.testName?.match(/#(\d+)$/)?.[1] || "0000";
+        // Pad the number to 4 digits
+        let nextNumber = String(parseInt(lastNumber) + 1).padStart(4, "0");
+        let testName = `${topic}_${difficulty} #${nextNumber}`;
+
+        latestPack = new QuestionPack({ testName, topic, difficulty, questions: [newQuestion._id] });
       } else {
         latestPack.questions.push(newQuestion._id);
       }
     }
     else if(difficulty == "hard"){
       if (!latestPack || latestPack.questions.length >= 15) {
-        latestPack = new QuestionPack({ topic, difficulty, questions: [newQuestion._id] });
+
+        let lastNumber = latestPack?.testName?.match(/#(\d+)$/)?.[1] || "0000";
+        // Pad the number to 4 digits
+        let nextNumber = String(parseInt(lastNumber) + 1).padStart(4, "0");
+        let testName = `${topic}_${difficulty} #${nextNumber}`;
+
+        latestPack = new QuestionPack({ testName, topic, difficulty, questions: [newQuestion._id] });
       } else {
         latestPack.questions.push(newQuestion._id);
       }

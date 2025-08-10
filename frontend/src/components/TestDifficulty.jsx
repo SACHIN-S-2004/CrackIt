@@ -91,7 +91,6 @@ const TestDifficulty = () => {
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedTest, setSelectedTest] = useState(null);
-  const [selectedTestIndex, setSelectedTestIndex] = useState(null);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -130,25 +129,23 @@ const TestDifficulty = () => {
       }
   }, [topic]);
 
-  const handleStartTest = (test, index) => {
+  const handleStartTest = (test) => {
     setSelectedTest(test);
-    setSelectedTestIndex(index);
     setShowConfirmModal(true);
   };
 
   const confirmStartTest = () => {
     setShowConfirmModal(false);
     // Navigate to TestPage.jsx with test data
-      console.log('Test ID:', selectedTest._id);
+      /*console.log('Test ID:', selectedTest._id);
       console.log('Test Topic:', selectedTest.topic);
-      console.log('Test Difficulty:', selectedTest.difficulty);
-      console.log('Test Index:', selectedTestIndex);
+      console.log('Test Difficulty:', selectedTest.difficulty);*/
     navigate(`/aptitude-tests/${category}/${topic}/${selectedTest.difficulty}/test`, {
       state: {
         testId: selectedTest._id,
+        testName: selectedTest.testName,
         topic: selectedTest.topic,
-        difficulty: selectedTest.difficulty, 
-        testIndex: selectedTestIndex
+        difficulty: selectedTest.difficulty
       }
     });
   };
@@ -156,7 +153,6 @@ const TestDifficulty = () => {
   const cancelStartTest = () => {
     setShowConfirmModal(false);
     setSelectedTest(null);
-    setSelectedTestIndex(null);
   };
 
   const getDifficultyColor = (level) => {
@@ -283,7 +279,7 @@ const TestDifficulty = () => {
                               )}
 
                               <div className="flex-grow-1">
-                                <strong>{test.topic} #{index+1}</strong>
+                                <strong>{test.testName}</strong>
                               </div>
 
                               <div className="d-flex align-items-center gap-3">
@@ -308,7 +304,7 @@ const TestDifficulty = () => {
                                   <Button 
                                     variant="primary" 
                                     size="md"
-                                    onClick={() => handleStartTest(test, index+1)}
+                                    onClick={() => handleStartTest(test)}
                                     className="p-2 px-3 rounded-button"
                                   >
                                     Start Test
