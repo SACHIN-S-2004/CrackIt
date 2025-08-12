@@ -31,3 +31,7 @@ app.listen(PORT, () => {
 });*/
 
 app.get("/", (req, res) => res.status(200).send("server is running!"));
+
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
+});
