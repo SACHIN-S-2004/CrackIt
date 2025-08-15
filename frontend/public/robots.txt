@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://crackit-ghy3.onrender.com/sitemap.xml
