@@ -7,6 +7,7 @@ import { useDarkMode } from './DarkMode';
 import axios from 'axios';
 import Navbar from '../pages/home/Navbar';
 import { MFooter } from '../pages/home/Footer';
+import { Notify } from './onNotify';
 import '../TestDifficulty.css';
 
 const testContent = {
@@ -25,6 +26,14 @@ const testContent = {
     Through regular practice, you'll develop sharper comprehension, faster reading speed, and a more refined sense of language precision. These improvements translate not only to better test scores but to improved communication in real life — helping you to influence, persuade, and collaborate more effectively in both professional and academic settings.`,
     quote: "Words are, of course, the most powerful drug used by mankind.",
     author: "Mark Twain",
+  },
+  'logical-reasoning': {
+    title: 'Logical Reasoning',
+    description: `Logical Reasoning tests measure your ability to analyze patterns, relationships, and structured information to draw valid conclusions. These assessments often include puzzles, sequences, syllogisms, cause-and-effect scenarios, and argument evaluations. The aim is to test not just if you can think logically, but whether you can apply that logic consistently under time constraints.
+    This skill is vital in roles requiring systematic thinking, troubleshooting, strategy formulation, and decision-making — from law and engineering to business analytics and technology. Strong logical reasoning enables you to connect disparate pieces of information, identify hidden relationships, and rule out irrelevant data to find the correct answer.
+    Logical reasoning is different from memorization — it focuses on problem-solving frameworks and rational deduction. With regular practice, you'll become faster at dissecting complex problems, eliminating flawed options, and structuring your thoughts clearly. These skills not only boost your test performance but also improve everyday decision-making, making you more effective and reliable in professional and academic environments.`,
+    quote: '“It is not enough to have a good mind; it must be applied.”',
+    author: 'René Descartes',
   },
   'abstract-reasoning': {
     title: 'Abstract Reasoning',
@@ -91,6 +100,18 @@ const TestDifficulty = () => {
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedTest, setSelectedTest] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      
+      Notify("Your session is expired!", "Please login...");
+      navigate("/");
+      return;
+    }
+  
+  }, [navigate]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));

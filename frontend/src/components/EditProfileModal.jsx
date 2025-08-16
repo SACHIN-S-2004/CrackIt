@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { useDarkMode } from './DarkMode';
+import { Notify } from './onNotify';
 import '../registerStyle.css';
 
-const UpdateProfileModal = ({ show, onClose, onNotify, source }) => {
+const UpdateProfileModal = ({ show, onClose, source }) => {
   const [form1, setForm1] = useState({
     Fname: '',
     Lname: '',
@@ -15,7 +16,6 @@ const UpdateProfileModal = ({ show, onClose, onNotify, source }) => {
     password: '',
     confirmPassword: '',
   });
-  /*terms: false,*/
   const { isDarkMode } = useDarkMode();
   
   const [errors, setErrors] = useState({});
@@ -24,33 +24,31 @@ const UpdateProfileModal = ({ show, onClose, onNotify, source }) => {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-      // Fetch user data and populate form
-      const fetchUserData = async () => {
+    // Fetch user data and populate form
+    const fetchUserData = async () => {
       try {
-          const userData = JSON.parse(localStorage.getItem('user'));
-          /*const response = await axios.get(`http://localhost:3000/user/viewProfile?user=${user}`);
-          const userData = response.data;*/
-          if (source=="profile"){
-            setForm1({
+        const userData = JSON.parse(localStorage.getItem('user'));
+        if (source === "profile") {
+          setForm1({
             Fname: userData.Fname || '',
             Lname: userData.Lname || '',
             email: userData.email || '',
             phone: userData.phone || '',
-            });
-        }
-        else{
-            setForm2({
+          });
+        } else {
+          setForm2({
             email: userData.email || '',
             password: '',
-            confirmPassword: '',});
+            confirmPassword: '',
+          });
         }
       } catch (error) {
         console.error("⚠️ Error fetching user data:", error.message);
       }
-      };
-  
-      fetchUserData();
-  }, [show]);
+    };
+
+    fetchUserData();
+  }, [show, source]);
   
   if (!show) return null;
   
@@ -88,39 +86,35 @@ const UpdateProfileModal = ({ show, onClose, onNotify, source }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let res;
     try {
-    setSubmitting(true);
-    let token = localStorage.getItem("token");
-    if(source=="profile"){
-      if (validateProfile()) {
-        /*res=await axios.post("http://localhost:3000/user/updateProfile", form1, {*/
-        res=await axios.post("https://crackit-01.onrender.com/user/updateProfile", form1, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        onNotify("Update Successful!", "Enjoy learning...");
-        setForm1({ Fname: '', Lname: '', email: '', phone: '' });
-
-        const { user } = res.data;
-        localStorage.setItem("user", JSON.stringify(user));
-
-        setErrors({});
-        onClose();
-      }
-    }
-    else{
-        if (validatePass()) {
-          /*res=await axios.post("http://localhost:3000/user/changePassword", form2, {*/
-          res=await axios.post("https://crackit-01.onrender.com/user/changePassword", form2, {
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-              }
+      setSubmitting(true);
+      let token = localStorage.getItem("token");
+      if (source === "profile") {
+        if (validateProfile()) {
+          const res = await axios.post("https://crackit-01.onrender.com/user/updateProfile", form1, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
           });
-          onNotify("Update Successful!", "Enjoy learning...");
+          Notify("Update Successful!", "Enjoy learning...");
+          setForm1({ Fname: '', Lname: '', email: '', phone: '' });
+
+          const { user } = res.data;
+          localStorage.setItem("user", JSON.stringify(user));
+
+          setErrors({});
+          onClose();
+        }
+      } else {
+        if (validatePass()) {
+          const res = await axios.post("https://crackit-01.onrender.com/user/changePassword", form2, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          Notify("Update Successful!", "Enjoy learning...");
           setForm2({ email: '', password: '', confirmPassword: '' });
 
           const { user } = res.data;
@@ -129,23 +123,18 @@ const UpdateProfileModal = ({ show, onClose, onNotify, source }) => {
           setErrors({});
           onClose();
         }
-    }
-
-    // const { user } = res.data;
-    // localStorage.setItem("user", JSON.stringify(user));
+      }
     } catch (error) {
-        if (error.response && error.response.status === 400 && error.response.data.message === "User not found") {
-            setErrors({ email: "Error: Email doesn't exist, Try again Later" });
-        } else if (error.response && error.response.status === 400 && error.response.data.message === "Same Password") {
-            setErrors({ password: "Error: Same Password, Try another one" });
-        }
-        else {
-            onNotify("Updation Failed!", "Please try again later.");
-            console.error("⚠️ Updation error:", error.message);
-            onClose();
-        }
-    }
-    finally{
+      if (error.response && error.response.status === 400 && error.response.data.message === "User not found") {
+        setErrors({ email: "Error: Email doesn't exist, Try again Later" });
+      } else if (error.response && error.response.status === 400 && error.response.data.message === "Same Password") {
+        setErrors({ password: "Error: Same Password, Try another one" });
+      } else {
+        Notify("Updation Failed!", "Please try again later.");
+        console.error("⚠️ Updation error:", error.message);
+        onClose();
+      }
+    } finally {
       setSubmitting(false);
     }
   };
@@ -155,16 +144,16 @@ const UpdateProfileModal = ({ show, onClose, onNotify, source }) => {
       <div className={`registration-modal-card  mt-2 ${isDarkMode ? 'dark-mode' : ''}`}>
         <button className="btn-close custom-close-btn" onClick={handleModalClose}></button>
 
-        {(source === "profile")?(
-            <div className="text-center mb-4">
+        {(source === "profile") ? (
+          <div className="text-center mb-4">
             <h2 className="fw-bold">Edit Your Account</h2>
             <p className="text-muted">Keep your profile sharp — excellence is an ongoing journey.</p>
-            </div>
-        ):(
-            <div className="text-center mb-4">
+          </div>
+        ) : (
+          <div className="text-center mb-4">
             <h2 className="fw-bold">Change Password</h2>
             <p className="text-muted">CrackIt’s smarter when you're safer — update your password now.</p>
-            </div>
+          </div>
         )}
 
         <form onSubmit={handleSubmit} noValidate>

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import axios from "axios";
 import { useDarkMode } from './DarkMode';
+import { Notify } from './onNotify';
 import '../registerStyle.css';
 
-const RegistrationModal = ({ show, onClose, ShowLogin, onNotify }) => {
+const RegistrationModal = ({ show, onClose, ShowLogin }) => {
   const [form, setForm] = useState({
     Fname: '',
     Lname: '',
@@ -12,7 +13,6 @@ const RegistrationModal = ({ show, onClose, ShowLogin, onNotify }) => {
     confirmPassword: '',
     phone: '',
   });
-  /*terms: false,*/
   const { isDarkMode } = useDarkMode();
   
   const [errors, setErrors] = useState({});
@@ -36,19 +36,17 @@ const RegistrationModal = ({ show, onClose, ShowLogin, onNotify }) => {
     if (form.password.length < 6) newErrors.password = 'At least 8 characters required';
     if (form.password !== form.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
     if (form.phone && digitsOnly.length !== 10) newErrors.phone = 'Invalid phone number';
-    /*if (!form.terms) newErrors.terms = 'You must agree to the terms';*/
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (validate()) {
       setSubmitting(true);
       try {
         await axios.post("https://crackit-01.onrender.com/user/register", form);
-        onNotify("Registration Successful!", "Please login...");
+        Notify("Registration Successful!", "Please login...");
         setForm({ Fname: '', Lname: '', email: '', password: '', confirmPassword: '', phone: '' });
         setErrors({});
         onClose();
@@ -56,19 +54,17 @@ const RegistrationModal = ({ show, onClose, ShowLogin, onNotify }) => {
         if (error.response && error.response.status === 400 && error.response.data.message === "User already exists") {
           setErrors({ email: "Email already exists" });
         } else {
-          onNotify("Registration Failed!", "Please try again later.");
+          Notify("Registration Failed!", "Please try again later.");
           console.error("⚠️ Registration error:", error.message);
           onClose();
         }
-      }
-      finally{
+      } finally {
         setSubmitting(false);
       }
     }
-    
   };
 
-    const handleModalClose = () => {
+  const handleModalClose = () => {
     setForm({ Fname: '', Lname: '', email: '', password: '', confirmPassword: '', phone: '' });
     setErrors({});
     onClose();
@@ -169,8 +165,8 @@ const RegistrationModal = ({ show, onClose, ShowLogin, onNotify }) => {
             <label className="form-check-label" htmlFor="terms">
               I agree to the <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
             </label>
-            </div>*/}
-          {errors.terms && <div className="text-danger small mt-1">{errors.terms}</div>}
+          </div>
+          {errors.terms && <div className="text-danger small mt-1">{errors.terms}</div>}*/}
 
           <button type="submit" className="btn btn-primary w-100" disabled={submitting}>
             {submitting ? (

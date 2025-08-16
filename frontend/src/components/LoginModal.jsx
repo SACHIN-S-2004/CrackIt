@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import axios from "axios";
 import useAuthStore from './userToken';
 import { useDarkMode } from './DarkMode';
+import { Notify } from './onNotify';
 import '../loginStyle.css';
 
-const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
+const LoginModal = ({ show, onClose, ShowRegister }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -44,26 +45,22 @@ const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
     if (validate()) {
       setLoading(true);
       try {
-        //const res=await axios.post("https://localhost:3000/user/login", formData);
-        const res=await axios.post("https://crackit-01.onrender.com/user/login", formData);
-        //onNotify("Login Successful!");
-        //console.log("🎉 Login Successful!", formData);
+        const res = await axios.post("https://crackit-01.onrender.com/user/login", formData);
         console.log("🎉 Login Successful!");
         
         const { token, user } = res.data;
-        
         localStorage.setItem("user", JSON.stringify(user));
 
         setFormData({ email: '', password: '' });
         setErrors({});
         onClose();
 
-        onNotify("Logging in...", "Welcome, " + user.Fname + " " + user.Lname + "!");
-        setTimeout(() => /*localStorage.setItem("token", token)*/login(token), 3500);
+        Notify("Logging in...", "Welcome, " + user.Fname + " " + user.Lname + "!");
+        
+        setTimeout(() => login(token), 3500);
 
       } catch (error) {
-        console.log("⚠️ Login error:", error.message);
-        console.error("⚠️ Login error:", error.response.data.message);
+        console.error("⚠️ Login error:", error?.response?.data?.message || error.message);
 
         if (error.response && error.response.data.message === "User does not exist") {
           setErrors({ email: 'Incorrect email. Please check your credentials.' });
@@ -72,7 +69,6 @@ const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
           setErrors({ password: 'Incorrect Password. Please check your credentials.' });
         } 
         else {
-          //onNotify("Login Failed!");
           setErrors({ general: 'An unexpected error occurred. Please try again later.' });
         }  
       }
@@ -82,7 +78,7 @@ const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
     }
   };
 
-    const handleModalClose = () => {
+  const handleModalClose = () => {
     setFormData({ email: '', password: '' });
     setErrors({});
     onClose();
@@ -111,6 +107,7 @@ const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
             </div>
             <p className="error-message">{errors.email}</p>
           </div>
+          
           {/* Password */}
           <div className={`input-group ${errors.password ? 'error' : ''}`}>
             <div className="input-wrapper">
@@ -133,6 +130,7 @@ const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
             </div>
             <p className="error-message">{errors.password}</p>
           </div>
+          
           {/* Remember + Forgot */}
           <div className="form-options mb-4">
             <div className="remember-me">
@@ -146,11 +144,13 @@ const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
             </div>
             <a href="#">Forgot password?</a>
           </div>
-            {errors.general && (
-                <div className="alert alert-danger" role="alert">
-                  {errors.general}
-                </div>
-            )}
+
+          {errors.general && (
+            <div className="alert alert-danger" role="alert">
+              {errors.general}
+            </div>
+          )}
+          
           {/* Submit */}
           <button type="submit" className="login-btn" disabled={loading}>
             {loading ? (
@@ -165,7 +165,10 @@ const LoginModal = ({ show, onClose, ShowRegister, onNotify }) => {
         </form>
 
         <div className="register-link mt-4 text-center text-muted">
-          Don’t have an account?{' '}<button type="button" className="btn btn-link text-primary p-1" onClick={ShowRegister}>Register</button>
+          Don’t have an account?{' '}
+          <button type="button" className="btn btn-link text-primary p-1" onClick={ShowRegister}>
+            Register
+          </button>
         </div>
       </div>
     </div>

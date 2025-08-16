@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Table, Spinner, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../pages/home/Navbar';
 import {MFooter} from '../pages/home/Footer';
+import { Notify } from './onNotify';
 
 const PerformanceTracker = () => {
   const [activeCategory, setActiveCategory] = useState('Numerical Reasoning');
   const [performanceData, setPerformanceData] = useState({});
   const [loading, setLoading] = useState(true);
   const [pageIndex, setPageIndex] = useState(0);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      const token = localStorage.getItem("token");
+    
+      if (!token) {
+        Notify("Your session is expired!", "Please login...");
+        navigate("/");
+        return;
+      }
+    
+    }, [navigate]);
 
   const categories = [
     'Numerical Reasoning',

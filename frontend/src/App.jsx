@@ -8,6 +8,7 @@ import TestCategories from "./components/TestCategories";
 import TestDifficulty from "./components/TestDifficulty";
 import TestPage from './components/TestPage';
 import PerformanceTracker from './components/PerformanceTracker';
+import NotifyContainer from "./components/onNotify";
 import './App.css'
 import './darkMode.css' // Import dark mode styles
 
@@ -16,6 +17,7 @@ function App() {
     <DarkModeProvider>
       <Router>
         <ToastContainer position="top-center" />
+        <NotifyContainer />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/aptitude-tests" element={<TestCategories />}/>

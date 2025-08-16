@@ -4,6 +4,7 @@ import { Container, Row, Col, Card, Button, Form, Badge, Modal } from 'react-boo
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useDarkMode } from './DarkMode';
+import { Notify } from './onNotify';
 import '../TestPage.css';
 
 const TestPage = () => {
@@ -28,6 +29,21 @@ const TestPage = () => {
   const [modalType, setModalType] = useState(null); // 'exit' or 'submit'
 
   const timerRef = useRef(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      Notify("Your session is expired!", "Please login...");
+      navigate("/");
+      return;
+    }
+    if(testId === undefined){
+      Notify("An unexpected error occured!","Please try again later");
+      navigate("/");
+      return;
+    }
+  }, [navigate]);
 
   useEffect(() => {
     if (location.state) {

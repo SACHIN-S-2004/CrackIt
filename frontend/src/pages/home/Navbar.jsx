@@ -1,11 +1,11 @@
 import React, { useState, forwardRef, useEffect } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
-import {useDarkMode} from '../../components/DarkMode';
+import { useDarkMode } from '../../components/DarkMode';
 import RegistrationModal from '../../components/RegisterModal';
 import UpdateProfileModal from '../../components/EditProfileModal';
 import LoginModal from '../../components/LoginModal';
-import Notify from '../../components/onNotify';
+import { Notify } from '../../components/onNotify';
 import useAuthStore from '../../components/userToken';
 import ComingSoonModal from '../../components/ComingSoonModal';
 import './style.css';
@@ -14,10 +14,7 @@ const Navbar = () => {
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [UpdateProfile, setUpdateProfile] = useState(false);
-  const [notifyMessage1, setNotifyMessage1] = useState("");
-  const [notifyMessage2, setNotifyMessage2] = useState("");
   const [showCSoonModal, setShowCSoonModal] = useState(false);
-
   const [source, setSource] = useState("");
 
   const { isAuthenticated, logout } = useAuthStore();
@@ -25,31 +22,13 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
-  const handleNotify = (message, message2) => {
-    setNotifyMessage1(message);
-    setNotifyMessage2(message2);
-  };
-  
-  const updateProfileInvoke = (message) => {
-    setNotifyMessage1(message);
-  };
-
   const handleLogout = () => {
-    setNotifyMessage1("Logging out!...");
-    setNotifyMessage2("");
-    
-    setTimeout(() => {
-      handleNotifyClose();
-      //localStorage.removeItem("token");
-      //logout();
-    }, 4000);
-    setTimeout(() => logout(), 3500);
-    setTimeout(() => navigate('/'), 3500);
-  };
+    Notify("Logging out!...", "");
 
-  const handleNotifyClose = () => {
-    setNotifyMessage1("");
-    setNotifyMessage2("");
+    setTimeout(() => {
+      logout();
+      navigate('/');
+    }, 3500);
   };
 
   const CustomToggle = forwardRef(({ children, onClick }, ref) => (
@@ -95,11 +74,10 @@ const Navbar = () => {
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
           <i className="ri-menu-line fs-3"></i>
         </button>
-        {/*console.log(localStorage.getItem('token'))*/}
-        <div className="collapse navbar-collapse d-flex justify-content-end" id="navbarMenu">
 
-          {/*((localStorage.getItem('token'))!="null")*/isAuthenticated?(
-          <div className="collapse navbar-collapse" id="navbarMenu">
+        <div className="collapse navbar-collapse d-flex justify-content-end" id="navbarMenu">
+          {isAuthenticated ? (
+            <div className="collapse navbar-collapse" id="navbarMenu">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-md-4">
                 <li className="nav-item">
                   <Link className="nav-link text-dark" to="/">Home</Link>
@@ -107,12 +85,14 @@ const Navbar = () => {
                 <li className="nav-item">
                   <Link className="nav-link text-dark" to="/aptitude-tests">Tests</Link>
                 </li>
-                <li className="nav-item"><a type="button" className="nav-link text-dark" onClick={() => setShowCSoonModal(true)}>Resources</a></li>
-                {/*<li className="nav-item">
-                  <Link className="nav-link text-dark" to="/about" >About</Link>
-                </li>*/}
-                <li className="nav-item"><a type="button" className="nav-link text-dark" onClick={() => setShowCSoonModal(true)}>About</a></li>
+                <li className="nav-item">
+                  <a type="button" className="nav-link text-dark" onClick={() => setShowCSoonModal(true)}>Resources</a>
+                </li>
+                <li className="nav-item">
+                  <a type="button" className="nav-link text-dark" onClick={() => setShowCSoonModal(true)}>About</a>
+                </li>
               </ul>
+
               {/* Dark Mode Toggle */}
               <button 
                 className="dark-mode-toggle me-3"
@@ -122,7 +102,6 @@ const Navbar = () => {
                 <i className={`ri-${isDarkMode ? 'sun' : 'moon'}-line`}></i>
               </button>
 
-              {/* Replace react-bootstrap Dropdown with a custom dropdown */}
               <Dropdown align="end">
                 <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-toggle">
                   {(() => {
@@ -141,17 +120,15 @@ const Navbar = () => {
                     borderRadius: '8px',
                   }}
                 >
-                  <Dropdown.Item onClick={() => { setUpdateProfile(true); setSource("profile");}} /*href="/profile"*/ className="text-white">Edit Profile</Dropdown.Item>
-                  <Dropdown.Item onClick={() => { setUpdateProfile(true); setSource("password");}} /*href="/profile"*/ className="text-white">Change Password</Dropdown.Item>
-                  <Dropdown.Item onClick={() => { navigate("/performance-tracker");}} /*href="/profile"*/ className="text-white">Performance Tracker</Dropdown.Item>
+                  <Dropdown.Item onClick={() => { setUpdateProfile(true); setSource("profile");}} className="text-white">Edit Profile</Dropdown.Item>
+                  <Dropdown.Item onClick={() => { setUpdateProfile(true); setSource("password");}} className="text-white">Change Password</Dropdown.Item>
+                  <Dropdown.Item onClick={() => { navigate("/performance-tracker");}} className="text-white">Performance Tracker</Dropdown.Item>
                   <Dropdown.Item onClick={handleLogout} className="text-white">Logout</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-
-          </div>
-          ):(
+            </div>
+          ) : (
             <div className="d-flex align-items-center">
-              {/* Dark Mode Toggle for non-authenticated users */}
               <button 
                 className="dark-mode-toggle me-3"
                 onClick={toggleDarkMode}
@@ -165,36 +142,31 @@ const Navbar = () => {
           )}
         </div>
       </div>
-      <RegistrationModal show={showRegister} onClose={() => setShowRegister(false)}
+
+      {/* Modals */}
+      <RegistrationModal 
+        show={showRegister} 
+        onClose={() => setShowRegister(false)}
         ShowLogin={() => {
           setShowRegister(false);
           setShowLogin(true);
         }}
-        onNotify={handleNotify}
+        onNotify={(m1, m2) => Notify(m1, m2)} 
       />
-      <LoginModal show={showLogin} onClose={() => setShowLogin(false)} 
+      <LoginModal 
+        show={showLogin} 
+        onClose={() => setShowLogin(false)} 
         ShowRegister={() => {
           setShowLogin(false);
           setShowRegister(true);
         }}
-        onNotify={handleNotify}
+        onNotify={(m1, m2) => Notify(m1, m2)} 
       />
-      {notifyMessage1 && (
-        <Notify
-          message={notifyMessage1}
-          message2={notifyMessage2}
-          onClose={handleNotifyClose}
-          onShowLogin={() => setShowLogin(true)}
-          /*onShowLogin={() => {
-            // Only show login if user explicitly requests it
-            if (!notifyMessage1.includes("Logged out")) {
-              setShowLogin(true);
-            }
-          }}*/
-        />
-      )}
-      <UpdateProfileModal show={UpdateProfile} onClose={() => setUpdateProfile(false)}
-        onNotify={handleNotify} source={source}
+      <UpdateProfileModal 
+        show={UpdateProfile} 
+        onClose={() => setUpdateProfile(false)}
+        onNotify={(m1, m2) => Notify(m1, m2)} 
+        source={source}
       />
       <ComingSoonModal show={showCSoonModal} onHide={() => setShowCSoonModal(false)} />
     </nav>

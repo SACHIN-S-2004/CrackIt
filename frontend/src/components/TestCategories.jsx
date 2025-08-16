@@ -1,15 +1,30 @@
 import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useEffect } from "react";
 import { useDarkMode } from './DarkMode';
 import Navbar from '../pages/home/Navbar';
 import { MFooter } from '../pages/home/Footer';
+import { Notify } from './onNotify';
 import '../TestCategories.css';
 
 const TestCategories = () => {
 
   const { isDarkMode } = useDarkMode();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      
+      Notify("Your session is expired!", "Please login...");
+      navigate("/");
+      return;
+    }
+  
+  }, [navigate]);
 
   const categories = [
     {
