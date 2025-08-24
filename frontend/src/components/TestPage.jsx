@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Form, Badge, Modal } from 'react-bootstrap';
 import axios from 'axios';
@@ -247,6 +247,26 @@ const TestPage = () => {
       </Container>
     );
   }
+  function RenderWithLineBreaks({ text }) {
+    // Normalize <br> to \n for consistent splitting
+    //const normalized = text.replace(/<br\s*\/?>/gi, '\n');
+    const normalized = text.replace(/<br\s*\/?>/gi, '\n').replace(/\\n/g, '\n');
+
+    // Split by \n and map to JSX
+    const lines = normalized.split('\n');
+    console.log(lines);
+    return (
+      <>
+        {lines.map((line, index) => (
+          <React.Fragment key={index}>
+            {line}
+            {index < lines.length - 1 && <br />}
+          </React.Fragment>
+        ))}
+      </>
+    );
+  }
+
 
   if (submitted) {
     const score = calculateScore();
@@ -378,7 +398,9 @@ const TestPage = () => {
           >
             <Card className="p-4 shadow-sm mb-3">
               <h5>Question {currentQuestionIndex + 1}</h5>
-              <p className="mb-4">{current.question}</p>
+              <div className="mb-4">
+                <RenderWithLineBreaks text={current.question} />
+              </div>
 
               <Form>
                 {current.options.map((option, idx) => (

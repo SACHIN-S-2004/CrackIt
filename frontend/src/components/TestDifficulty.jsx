@@ -127,7 +127,7 @@ const TestDifficulty = () => {
         console.error(err);
         setLoading(false);
 
-        if (res.response && res.response.status === 404) {
+        if (err.response && err.response.status === 404) {
           setError('No tests available for this topic yet.');
         } else {
           setError('Failed to load tests. Please try again later.');
