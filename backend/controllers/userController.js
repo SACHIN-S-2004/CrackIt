@@ -1,6 +1,7 @@
 const User = require('../models/User'); 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken'); 
+const UserMessage = require('../models/UserMsg');
 
 // Register user
 exports.registerUser = async (req,res)=>{
@@ -101,6 +102,31 @@ exports.changePassword = async (req, res) => {
         await user.save();
 
         res.status(200).json({ message: "Password updated successfully", user });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+exports.msgSent = async (req, res) => {
+    try {
+        const { Fname, Lname, email, subject, message } = req.body;
+        
+        //console.log(Fname, Lname, email, subject, message);
+        // Find user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+
+        const fullName = `${Fname} ${Lname}`;
+
+        // Create user message
+        const newMessage = new UserMessage({fullName, email, subject, message});
+        await newMessage.save();
+
+        res.status(200).json({ message: "Message sent successfully", newMessage });
 
     } catch (error) {
         console.error(error);

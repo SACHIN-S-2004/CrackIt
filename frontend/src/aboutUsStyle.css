@@ -1,0 +1,59 @@
+.aboutUs-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.aboutUs-modal-card {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  width: 90%;
+  max-width: 700px;
+  max-height: 80vh;
+  padding: 2rem 1rem 2rem 2rem; /* top, right, bottom, left */
+  display: flex;
+  flex-direction: column;
+}
+
+/* close button stays fixed */
+.custom-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 0.5rem;
+  border: none;
+  z-index: 20;
+  margin-left: 10px;
+}
+
+/* scrollable area */
+.aboutus-body {
+  overflow-y: auto;
+  margin-top: 1rem;
+  padding-inline-end: 0.5rem;  /* safe spacing for text, scrollbar stays at edge */
+}
+
+.aboutus-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.aboutus-body::-webkit-scrollbar-thumb {
+    background: #6c63ff;   /* CrackIt primary */
+    border-radius: 6px;
+}
+
+.aboutus-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.aboutus-body p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  text-align: justify;
+  margin-right: 1rem;
+}

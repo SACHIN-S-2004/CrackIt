@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDarkMode } from '../../components/DarkMode';
-import useAuthStore from '../../components/userToken'; // Add this
+import useAuthStore from '../../components/userToken';
 import './style.css';
 
 const HeroSection = () => {
   const { isDarkMode } = useDarkMode();
-  const { isAuthenticated } = useAuthStore(); // Add this
+  const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
+
+  /*useEffect(() => {
+    const handleStartTest = () => loginVerify();
+
+    window.addEventListener('startTest', handleStartTest);
+
+    return () => window.removeEventListener('startTest', handleStartTest);
+  }, []);*/
 
   function loginVerify(){
     if (!isAuthenticated) {

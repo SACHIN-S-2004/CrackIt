@@ -106,8 +106,8 @@ const TestDifficulty = () => {
   
     if (!token) {
       
-      Notify("Your session is expired!", "Please login...");
-      navigate("/");
+      Notify("Authentication Required", "Log in to proceed! ....");
+      navigate("/aptitude-tests");
       return;
     }
   

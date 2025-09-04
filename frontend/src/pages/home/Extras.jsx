@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
-import './style.css';
+import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import ComingSoonModal from '../../components/ComingSoonModal';
+import useAuthStore from '../../components/userToken';
+import './style.css';
 
 const testimonials = [
   {
@@ -25,6 +28,19 @@ const testimonials = [
 
 const Testimonials = () => {
   const [showCSoonModal, setShowCSoonModal] = useState(false);
+  const { isAuthenticated } = useAuthStore();
+
+  const navigate = useNavigate();
+
+  const handlestartTest = () => {
+    if (!isAuthenticated) {
+      // Trigger navbar login modal
+      window.dispatchEvent(new CustomEvent('openLoginModal'));
+      return;
+    } else {
+      navigate('/aptitude-tests');
+    }
+  };
 
   return (
     <>
@@ -77,7 +93,8 @@ const Testimonials = () => {
             Join thousands of professionals who have unlocked their cognitive abilities through our comprehensive aptitude testing platform. Start your journey today.
           </p>
           <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center mb-5">
-            <a className="btn btn-light text-primary px-4 py-3 fs-5 rounded-button hover-scale" href="#">Start Your Test</a>
+            <button className="btn btn-light text-primary px-4 py-3 fs-5 rounded-button hover-scale" onClick={handlestartTest}>Start Your Test</button>
+
             <button className="btn btn-outline-light px-4 py-3 fs-5 rounded-button" onClick={() => setShowCSoonModal(true)}>View Sample Questions</button>
           </div>
           <div className="row g-4 text-center">

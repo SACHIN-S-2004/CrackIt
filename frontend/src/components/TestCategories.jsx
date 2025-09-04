@@ -14,7 +14,7 @@ const TestCategories = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
+  /*useEffect(() => {
     const token = localStorage.getItem("token");
   
     if (!token) {
@@ -24,7 +24,7 @@ const TestCategories = () => {
       return;
     }
   
-  }, [navigate]);
+  }, [navigate]);*/
 
   const categories = [
     {

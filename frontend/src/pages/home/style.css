@@ -100,12 +100,14 @@
 
 /* Full-width footer text links */
 .footer-link {
-  color: #adb5bd;
+  /*color: #adb5bd;*/
+  opacity: 0.8;
   text-decoration: none;
 }
 
 .footer-link:hover {
-  color: #ffffff;
+  color: #13def4;
+  opacity: 1;
 }
 
 .text-blue-100 {
@@ -173,7 +175,19 @@
 .navbar-nav .nav-item:nth-child(2) { animation-delay: 0.2s; }
 .navbar-nav .nav-item:nth-child(3) { animation-delay: 0.3s; }
 .navbar-nav .nav-item:nth-child(4) { animation-delay: 0.4s; }
+.navbar-nav .nav-item:nth-child(5) { animation-delay: 0.5s; }
 
 .custom-bttn {
   min-width: unset !important;
+}
+
+p {
+  text-align: center;
+  text-justify: inter-word;
+}
+
+.no-style {
+  text-align: justify;
+  text-justify: inter-word;
+  opacity: 0.8;
 }

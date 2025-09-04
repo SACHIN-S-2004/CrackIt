@@ -34,12 +34,12 @@ const TestPage = () => {
     const token = localStorage.getItem("token");
   
     if (!token) {
-      Notify("Your session is expired!", "Please login...");
-      navigate("/");
+      Notify("Authentication Required", "Log in to proceed!");
+      navigate("/aptitude-tests");
       return;
     }
     if(testId === undefined){
-      Notify("An unexpected error occured!","Please try again later");
+      Notify("An unexpected error occurred!","Please try again later");
       navigate("/");
       return;
     }
@@ -254,7 +254,7 @@ const TestPage = () => {
 
     // Split by \n and map to JSX
     const lines = normalized.split('\n');
-    console.log(lines);
+    //console.log(lines);
     return (
       <>
         {lines.map((line, index) => (

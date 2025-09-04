@@ -16,6 +16,7 @@ const NotifyContainer = () => {
   const [msg1, setMsg1] = useState("");
   const [msg2, setMsg2] = useState("");
   const progressBarRef = useRef(null);
+  const [status, setStatus] = useState("");
 
   // register this component as the global handler
   useEffect(() => {
@@ -23,7 +24,16 @@ const NotifyContainer = () => {
       setMsg1(m1);
       setMsg2(m2);
     };
+
   }, []);
+  
+  useEffect(() => {
+    if(msg1 === "Message Sent Successfully!" || msg1 === "Registration Successful!" || msg1 === "Logging out!..." || msg1 === "Logging in..."){
+      setStatus("success");
+    } else{
+      setStatus("error");
+    }
+  }, [msg1]);
 
   useEffect(() => {
     if (!msg1) return;
@@ -45,7 +55,7 @@ const NotifyContainer = () => {
   }, [msg1]);
 
   const handleClose = () => {
-    if (msg1 === "Registration Successful!" || msg1 === "Your session is expired!") {
+    if (msg1 === "Registration Successful!" || msg1 === "Authentication Required") {
       window.dispatchEvent(new Event("openLoginModal"));
     }
     setMsg1("");
@@ -60,10 +70,15 @@ const NotifyContainer = () => {
       className="position-fixed top-0 end-0 m-3"
       style={{ zIndex: 1060, maxWidth: "350px", animation: "slideInRight 0.4s ease-out" }}
     >
-      <div className="alert alert-success shadow rounded-4 p-3 d-flex flex-column" role="alert">
+      <div className={`alert ${status === 'error' ? 'alert-danger' : 'alert-success'} shadow rounded-4 p-3 d-flex flex-column`} role="alert">
         <div className="d-flex justify-content-between align-items-start">
           <div className="d-flex align-items-center gap-2">
-            <i className="ri-checkbox-circle-line fs-4 text-success"></i>
+            {(status === "error")?(
+              <i className="ri-close-circle-line fs-4 text-danger"></i>
+            ):(
+              <i className="ri-checkbox-circle-line fs-4 text-success"></i>
+            )}
+  
             <div>
               <strong className="fs-6">{msg1}</strong>
               <div className="text-muted small">{msg2}</div>

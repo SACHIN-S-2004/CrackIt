@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
-import './style.css';
+import { Link } from 'react-router-dom';
+import useAuthStore from '../../components/userToken';
 import ComingSoonModal from '../../components/ComingSoonModal';
+import { Notify } from '../../components/onNotify';
+import './style.css';
 
 export function MFooter() {
   return (
@@ -12,27 +15,51 @@ export function MFooter() {
 
 const Footer = () => {
   const [showCSoonModal, setShowCSoonModal] = useState(false);
+  const { isAuthenticated } = useAuthStore();
+
+  function showContactUsModal(){
+    if (!isAuthenticated) {
+      // Trigger navbar login modal
+      Notify("Authentication Required", "Log in to proceed! ....");
+    } else {
+      window.dispatchEvent(new CustomEvent('openContactModal'));
+      return;
+    }
+  }
+
   return (
     <>
     <ComingSoonModal show={showCSoonModal} onHide={() => setShowCSoonModal(false)} /> 
-    <footer className="footer bg-dark text-white pt-5 pb-3">
+    <footer className="footer pt-5 pb-3">
       <div className="container">
         <div className="row g-4 mb-4">
           <div className="col-md-4">
             <h5 className="pacifico-font text-primary mb-3">CrackIt</h5>
-            <p className="p-2 text-white-50">Empowering students and professionals to excel in aptitude tests through innovative learning technology and comprehensive practice materials.</p>
+            <p className="p-2 no-style">Empowering students and professionals to excel in aptitude tests through innovative learning technology and comprehensive practice materials.</p>
           </div>
           <div className="col-md-4">
             <h6 className="fw-bold mb-3">Quick Links</h6>
             <ul className="list-unstyled text-muted">
-              <li><a href="#" className="footer-link">About Us</a></li>
-              <li><a href="#" className="footer-link">Contact</a></li>
-              <li><a href="#" className="footer-link">Blog</a></li>
+              <li>
+                <Link className="{isDarkMode ? footer-link : Wfooter-link}" onClick={() => window.dispatchEvent(new CustomEvent('openAboutUsModal'))}>
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link className="{isDarkMode ? footer-link : Wfooter-link}" onClick={() => showContactUsModal()}>
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link className="{isDarkMode ? footer-link : Wfooter-link}" onClick={() => window.dispatchEvent(new CustomEvent('elseCase'))}>
+                  Blog
+                </Link>
+              </li>
             </ul>
           </div>
           <div className="col-md-4">
             <h6 className="fw-bold mb-3">Stay Updated</h6>
-            <p className="p-2 text-white-50">Subscribe to our newsletter for the latest updates and study tips.</p>
+            <p className="p-2 no-style">Subscribe to our newsletter for the latest updates and study tips.</p>
             <div className="d-flex">
               <input type="email" placeholder="Enter your email" className="form-control rounded-button" />
               <button className="btn btn-primary ms-2 rounded-button custom-bttn" onClick={() => setShowCSoonModal(true)}>Subscribe</button>

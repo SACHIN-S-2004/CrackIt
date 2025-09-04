@@ -8,11 +8,15 @@ import LoginModal from '../../components/LoginModal';
 import { Notify } from '../../components/onNotify';
 import useAuthStore from '../../components/userToken';
 import ComingSoonModal from '../../components/ComingSoonModal';
+import FeedbackModal from '../../components/Feedback';
+import AboutUsModal from '../../components/AboutUs';
 import './style.css';
 
 const Navbar = () => {
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [showAboutUs, setShowAboutUs] = useState(false);
   const [UpdateProfile, setUpdateProfile] = useState(false);
   const [showCSoonModal, setShowCSoonModal] = useState(false);
   const [source, setSource] = useState("");
@@ -59,8 +63,22 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleOpenLogin = () => setShowLogin(true);
+    const handleOpenAboutUs = () => setShowAboutUs(true);
+    const handleOpenContact = () => setShowFeedback(true);
+    const handleScrollTop = () => setShowCSoonModal(true);
+
     window.addEventListener('openLoginModal', handleOpenLogin);
-    return () => window.removeEventListener('openLoginModal', handleOpenLogin);
+    window.addEventListener('openAboutUsModal', handleOpenAboutUs);
+    window.addEventListener('openContactModal', handleOpenContact);
+    window.addEventListener('elseCase', handleScrollTop);
+
+
+    return () => {
+      window.removeEventListener('openLoginModal', handleOpenLogin)
+      window.removeEventListener('openAboutUsModal', handleOpenAboutUs)
+      window.removeEventListener('openContactModal', handleOpenContact);
+      window.removeEventListener('elseCase', handleScrollTop);
+    };
   }, []);
 
   return (
@@ -89,14 +107,15 @@ const Navbar = () => {
                   <a type="button" className="nav-link text-dark" onClick={() => setShowCSoonModal(true)}>Resources</a>
                 </li>
                 <li className="nav-item">
-                  <a type="button" className="nav-link text-dark" onClick={() => setShowCSoonModal(true)}>About</a>
+                  <a type="button" className="nav-link text-dark" onClick={() => setShowAboutUs(true)}>About Us</a>
+                </li>
+                <li className="nav-item">
+                  <a type="button" className="nav-link text-dark" onClick={() => setShowFeedback(true)}>Contact</a>
                 </li>
               </ul>
 
               {/* Dark Mode Toggle */}
-              <button 
-                className="dark-mode-toggle me-3"
-                onClick={toggleDarkMode}
+              <button className="dark-mode-toggle me-3" onClick={toggleDarkMode}
                 title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
               >
                 <i className={`ri-${isDarkMode ? 'sun' : 'moon'}-line`}></i>
@@ -128,16 +147,32 @@ const Navbar = () => {
               </Dropdown>
             </div>
           ) : (
-            <div className="d-flex align-items-center">
-              <button 
-                className="dark-mode-toggle me-3"
-                onClick={toggleDarkMode}
+            <div className="collapse navbar-collapse" id="navbarMenu">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-md-4">
+                <li className="nav-item">
+                  <Link className="nav-link text-dark" to="/">Home</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link text-dark" to="/aptitude-tests">Tests</Link>
+                </li>
+                <li className="nav-item">
+                  <a type="button" className="nav-link text-dark" onClick={() => setShowCSoonModal(true)}>Resources</a>
+                </li>
+                <li className="nav-item">
+                  <a type="button" className="nav-link text-dark" onClick={() => setShowAboutUs(true)}>About Us</a>
+                </li>                
+              </ul>
+
+              {/* Dark Mode Toggle */}
+              <button className="dark-mode-toggle me-3" onClick={toggleDarkMode}
                 title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
               >
                 <i className={`ri-${isDarkMode ? 'sun' : 'moon'}-line`}></i>
               </button>
-              <button className="btn btn-outline-primary me-2 rounded-button" onClick={() => setShowLogin(true)}>Login</button>
-              <button className="btn btn-primary rounded-button" onClick={() => setShowRegister(true)}>Register</button>
+              <div className="d-flex align-items-center">
+                <button className="btn btn-outline-primary me-2 rounded-button" onClick={() => setShowLogin(true)}>Login</button>
+                <button className="btn btn-primary rounded-button" onClick={() => setShowRegister(true)}>Register</button>
+              </div>
             </div>
           )}
         </div>
@@ -167,6 +202,15 @@ const Navbar = () => {
         onClose={() => setUpdateProfile(false)}
         onNotify={(m1, m2) => Notify(m1, m2)} 
         source={source}
+      />
+      <FeedbackModal 
+        show={showFeedback} 
+        onClose={() => setShowFeedback(false)} 
+        onNotify={(m1, m2) => Notify(m1, m2)} 
+      />
+      <AboutUsModal 
+        show={showAboutUs} 
+        onClose={() => setShowAboutUs(false)} 
       />
       <ComingSoonModal show={showCSoonModal} onHide={() => setShowCSoonModal(false)} />
     </nav>
