@@ -3,12 +3,12 @@ import { Container, Row, Col, Card, Button, Badge, Collapse, Spinner, Modal } fr
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { FaChevronRight, FaChevronDown, FaStar, FaCheck } from 'react-icons/fa';
-import { useDarkMode } from './DarkMode';
 import axios from 'axios';
-import Navbar from '../pages/home/Navbar';
-import { MFooter } from '../pages/home/Footer';
-import { Notify } from './onNotify';
-import '../TestDifficulty.css';
+import { useDarkMode } from '../components/common/DarkModeToggle';
+import Navbar from '../components/common/Navbar';
+import { MFooter } from '../components/common/Footer';
+import { Notify } from '../utils/Notify';
+import '../styles/TestDifficulty.css';
 
 const testContent = {
   'numerical-reasoning': {

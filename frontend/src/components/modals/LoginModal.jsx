@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from "axios";
-import useAuthStore from './userToken';
-import { useDarkMode } from './DarkMode';
-import { Notify } from './onNotify';
-import '../loginStyle.css';
+import useAuthStore from '../../store/userToken';
+import { useDarkMode } from '../common/DarkModeToggle';
+import { Notify } from '../../utils/Notify';
+import '../../styles/loginStyle.css';
 
 const LoginModal = ({ show, onClose, ShowRegister }) => {
   const [formData, setFormData] = useState({

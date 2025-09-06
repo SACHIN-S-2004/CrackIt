@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { useDarkMode } from '../../components/DarkMode';
-import useAuthStore from '../../components/userToken';
-import './style.css';
+import { useDarkMode } from '../common/DarkModeToggle';
+import useAuthStore from '../../store/userToken';
+import '../../styles/HomePage.css';
 
 const HeroSection = () => {
   const { isDarkMode } = useDarkMode();

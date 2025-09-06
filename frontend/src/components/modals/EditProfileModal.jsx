@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import { useDarkMode } from './DarkMode';
-import { Notify } from './onNotify';
-import '../registerStyle.css';
+import { useDarkMode } from '../common/DarkModeToggle';
+import { Notify } from '../../utils/Notify';
+import '../../styles/registerStyle.css';
 
 const UpdateProfileModal = ({ show, onClose, source }) => {
   const [form1, setForm1] = useState({

@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
-import useAuthStore from '../../components/userToken';
-import ComingSoonModal from '../../components/ComingSoonModal';
-import { Notify } from '../../components/onNotify';
-import './style.css';
+import useAuthStore from '../../store/userToken';
+import ComingSoonModal from '../modals/ComingSoonModal';
+import { Notify } from '../../utils/Notify';
+import '../../styles/HomePage.css';
 
 export function MFooter() {
   return (

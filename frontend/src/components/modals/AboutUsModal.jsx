@@ -1,6 +1,6 @@
 import React from 'react';
-import { useDarkMode } from './DarkMode';
-import '../aboutUsStyle.css';
+import { useDarkMode } from '../common/DarkModeToggle';
+import '../../styles/aboutUsStyle.css';
 
 const AboutUsModal = ({ show, onClose }) => {
   const { isDarkMode } = useDarkMode();

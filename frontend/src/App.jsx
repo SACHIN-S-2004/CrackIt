@@ -2,15 +2,15 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { DarkModeProvider } from './components/DarkMode';
-import Index from "./pages/home/index";
-import TestCategories from "./components/TestCategories";
-import TestDifficulty from "./components/TestDifficulty";
-import TestPage from './components/TestPage';
-import PerformanceTracker from './components/PerformanceTracker';
-import NotifyContainer from "./components/onNotify";
-import './App.css'
-import './darkMode.css' // Import dark mode styles
+import { DarkModeProvider } from './components/common/DarkModeToggle';
+import HomePage from "./pages/HomePage";
+import TestCategories from "./pages/TestCategories";
+import TestDifficulty from "./pages/TestDifficulty";
+import TestPage from './pages/TestPage';
+import PerformanceTracker from './pages/PerformanceTracker';
+import NotifyContainer from "./utils/Notify";
+import './styles/App.css'
+import './styles/darkMode.css' // Import dark mode styles
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
         <ToastContainer position="top-center" />
         <NotifyContainer />
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/aptitude-tests" element={<TestCategories />}/>
           <Route path="/performance-tracker" element={<PerformanceTracker />} />
           <Route path="/aptitude-tests/:category/:topic/" element={<TestDifficulty />}/>

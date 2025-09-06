@@ -1,16 +1,16 @@
 import React, { useState, forwardRef, useEffect } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
-import { useDarkMode } from '../../components/DarkMode';
-import RegistrationModal from '../../components/RegisterModal';
-import UpdateProfileModal from '../../components/EditProfileModal';
-import LoginModal from '../../components/LoginModal';
-import { Notify } from '../../components/onNotify';
-import useAuthStore from '../../components/userToken';
-import ComingSoonModal from '../../components/ComingSoonModal';
-import FeedbackModal from '../../components/Feedback';
-import AboutUsModal from '../../components/AboutUs';
-import './style.css';
+import { useDarkMode } from './DarkModeToggle';
+import RegistrationModal from '../modals/RegisterModal';
+import UpdateProfileModal from '../modals/EditProfileModal';
+import LoginModal from '../modals/LoginModal';
+import { Notify } from '../../utils/Notify';
+import useAuthStore from '../../store/userToken';
+import ComingSoonModal from '../modals/ComingSoonModal';
+import FeedbackModal from '../modals/FeedbackModal';
+import AboutUsModal from '../modals/AboutUsModal';
+import '../../styles/HomePage.css';
 
 const Navbar = () => {
   const [showRegister, setShowRegister] = useState(false);

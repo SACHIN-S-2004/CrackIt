@@ -3,9 +3,9 @@ import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Form, Badge, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { useDarkMode } from './DarkMode';
-import { Notify } from './onNotify';
-import '../TestPage.css';
+import { useDarkMode } from '../components/common/DarkModeToggle';
+import { Notify } from '../utils/Notify';
+import '../styles/TestPage.css';
 
 const TestPage = () => {
   const location = useLocation();

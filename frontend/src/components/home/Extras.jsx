@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
-import ComingSoonModal from '../../components/ComingSoonModal';
-import useAuthStore from '../../components/userToken';
-import './style.css';
+import ComingSoonModal from '../modals/ComingSoonModal';
+import useAuthStore from '../../store/userToken';
+import '../../styles/HomePage.css';
 
 const testimonials = [
   {

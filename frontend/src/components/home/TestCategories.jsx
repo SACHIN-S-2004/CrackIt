@@ -1,5 +1,5 @@
 import React from 'react';
-import './style.css';
+import '../../styles/HomePage.css';
 
 const categories = [
   { icon: 'ri-calculator-line', title: 'Numerical Reasoning', desc: 'Test your mathematical and numerical problem-solving abilities with complex calculations and data interpretation.' },

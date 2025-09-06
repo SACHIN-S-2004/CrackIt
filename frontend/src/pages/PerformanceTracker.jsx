@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from '../pages/home/Navbar';
-import {MFooter} from '../pages/home/Footer';
-import { Notify } from './onNotify';
+import Navbar from '../components/common/Navbar';
+import {MFooter} from '../components/common/Footer';
+import { Notify } from '../utils/Notify';
 
 const PerformanceTracker = () => {
   const [activeCategory, setActiveCategory] = useState('Numerical Reasoning');
@@ -20,7 +20,7 @@ const PerformanceTracker = () => {
       const token = localStorage.getItem("token");
     
       if (!token) {
-        Notify("Your session is expired!", "Please login...");
+        Notify("Authentication Required", "Log in to proceed! ....");
         navigate("/");
         return;
       }
@@ -128,21 +128,17 @@ const PerformanceTracker = () => {
 };
 
 const PerformanceTabContent = ({ data }) => {
-  if (!data.length) {
-    return <p className="text-muted">No tests taken in this category yet.</p>;
-  }
-
-  const graphData = data.map((test, index) => ({
+  const graphData = data.length ? data.map((test, index) => ({
     name: `Test ${index + 1}`,
     score: test.score,
-  }));
+  })) : [{ name: "No Tests", score: 0 }];
 
   return (
     <>
       <Card className="mb-4 shadow-sm">
         <Card.Body>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={graphData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+            <LineChart data={graphData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis allowDecimals={false} />
@@ -150,6 +146,18 @@ const PerformanceTabContent = ({ data }) => {
               <Line type="monotone" dataKey="score" stroke="#007bff" strokeWidth={3} dot={{ r: 5 }} />
             </LineChart>
           </ResponsiveContainer>
+          {!data.length && (
+            <motion.p
+              className="text-center mt-3 p-3 border border-secondary rounded bg-light"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              whileHover={{ scale: 1.02 }}
+            >
+              This space is waiting for your first win. Go get it!
+            </motion.p>
+
+          )}
         </Card.Body>
       </Card>
 

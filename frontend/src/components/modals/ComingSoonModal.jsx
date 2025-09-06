@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import '../ComingSoonModal.css'; // Don't forget this
+import '../../styles/ComingSoonModal.css'; // Don't forget this
 
 const ComingSoonModal = ({ show, onHide }) => {
   return (

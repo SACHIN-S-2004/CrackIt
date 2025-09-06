@@ -1,3 +1,5 @@
 User-agent: *
-Allow: /
+Disallow: /performance-tracker
+Disallow: /aptitude-tests/*/*        # blocks /category/topic (2 segments)
+Disallow: /aptitude-tests/*/*/*/*    # blocks /category/topic/difficulty/test (4 segments)
 Sitemap: https://crackit-ghy3.onrender.com/sitemap.xml
