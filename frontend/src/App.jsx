@@ -24,6 +24,7 @@ function App() {
           <Route path="/performance-tracker" element={<PerformanceTracker />} />
           <Route path="/aptitude-tests/:category/:topic/" element={<TestDifficulty />}/>
           <Route path="/aptitude-tests/:category/:topic/:difficulty/test" element={<TestPage />} />
+          <Route path="/aptitude-tests/guest/sampleTest" element={<TestPage />} />
         </Routes>
       </Router>
     </DarkModeProvider>

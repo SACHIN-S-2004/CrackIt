@@ -28,7 +28,7 @@ const NotifyContainer = () => {
   }, []);
   
   useEffect(() => {
-    if(msg1 === "Message Sent Successfully!" || msg1 === "Registration Successful!" || msg1 === "Logging out!..." || msg1 === "Logging in..."){
+    if(msg1 === "Message Sent Successfully!" || msg1 === "Registration Successful!" || msg1 === "Update Successful!" || msg1 === "Authentication Required" || msg1 === "Logging out!..." || msg1 === "Logging in..."){
       setStatus("success");
     } else{
       setStatus("error");

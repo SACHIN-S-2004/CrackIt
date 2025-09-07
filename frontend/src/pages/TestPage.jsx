@@ -15,6 +15,7 @@ const TestPage = () => {
   const savedMeta = JSON.parse(localStorage.getItem('test_meta')) || {};
   const { testId, testName, topic, difficulty } = location.state || savedMeta;
 
+  const [isGuest, setIsGuest] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
@@ -31,17 +32,22 @@ const TestPage = () => {
   const timerRef = useRef(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-  
-    if (!token) {
-      Notify("Authentication Required", "Log in to proceed!");
-      navigate("/aptitude-tests");
-      return;
+    if(testId === '68bc4204878892850ee18445' || testName === 'Sample Test'){
+      setIsGuest(true);
     }
-    if(testId === undefined){
-      Notify("An unexpected error occurred!","Please try again later");
-      navigate("/");
-      return;
+    else{
+      const token = localStorage.getItem("token");
+    
+      if (!token) {
+        Notify("Authentication Required", "Log in to proceed!");
+        navigate("/aptitude-tests");
+        return;
+      }
+      if(testId === undefined){
+        Notify("An unexpected error occurred!","Please try again later");
+        navigate("/");
+        return;
+      }
     }
   }, [navigate]);
 
@@ -162,13 +168,20 @@ const TestPage = () => {
       clearInterval(timerRef.current);
       localStorage.removeItem(`test_${testId}`);
       localStorage.removeItem('test_meta');
-      navigate('/aptitude-tests', { replace: true });
+      if(isGuest === true){
+        navigate('/', { replace: true });
+      }
+      else{
+        navigate('/aptitude-tests', { replace: true });
+      }
     } else if (modalType === 'submit') {
       clearInterval(timerRef.current);
       setSubmitted(true);
       localStorage.removeItem(`test_${testId}`);
       localStorage.removeItem('test_meta');
-      submitResultToServer();
+      if(isGuest === false){
+        submitResultToServer();
+      }
     }
   };
 
@@ -290,8 +303,14 @@ const TestPage = () => {
 
         </motion.div>
           <div className="text-center">
-            <Link to="/aptitude-tests" className="btn btn-primary mt-3 mb-4 me-2">Back to Categories</Link>
-            <Link to="/performance-tracker" className="btn btn-primary mt-3 mb-4">Progress History</Link>
+            {isGuest === true ? (
+              <Link to="/" className="btn btn-primary mt-3 mb-4 me-2">Back to Home</Link>
+            ):(
+              <>
+                <Link to="/aptitude-tests" className="btn btn-primary mt-3 mb-4 me-2">Back to Categories</Link>
+                <Link to="/performance-tracker" className="btn btn-primary mt-3 mb-4">Progress History</Link>
+              </>
+            )}
           </div>
         <Row>
           <Col md={8} className="mx-auto">

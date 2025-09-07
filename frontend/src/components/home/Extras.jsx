@@ -1,31 +1,17 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { Modal, Button, Spinner } from 'react-bootstrap';
+import axios from 'axios';
 import ComingSoonModal from '../modals/ComingSoonModal';
 import useAuthStore from '../../store/userToken';
 import '../../styles/HomePage.css';
 
-const testimonials = [
-  {
-    name: 'Sarah Johnson',
-    role: 'Software Engineer',
-    image: 'https://readdy.ai/api/search-image?query=professional%20young%20woman%20smiling%20confident%20business%20attire%20headshot%20portrait%20clean%20white%20background&width=80&height=80&seq=testimonial001&orientation=squarish',
-    text: 'AptitudeAce helped me land my dream job! The personalized practice sessions and detailed analytics made all the difference in my preparation.',
-  },
-  {
-    name: 'Michael Chen',
-    role: 'Finance Analyst',
-    image: 'https://readdy.ai/api/search-image?query=professional%20young%20man%20smiling%20confident%20business%20suit%20headshot%20portrait%20clean%20white%20background&width=80&height=80&seq=testimonial002&orientation=squarish',
-    text: 'The comprehensive test bank and real-time feedback system are incredible. I improved my scores by 40% in just two months!',
-  },
-  {
-    name: 'Emily Rodriguez',
-    role: 'Graduate Student',
-    image: 'https://readdy.ai/api/search-image?query=professional%20young%20woman%20smiling%20confident%20business%20attire%20headshot%20portrait%20clean%20white%20background%20diverse&width=80&height=80&seq=testimonial003&orientation=squarish',
-    text: 'Perfect for graduate school prep! The adaptive learning system identified my weak areas and helped me focus my study time effectively.',
-  }
-];
-
 const Testimonials = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedTest, setSelectedTest] = useState({});
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
   const [showCSoonModal, setShowCSoonModal] = useState(false);
   const { isAuthenticated } = useAuthStore();
 
@@ -41,50 +27,124 @@ const Testimonials = () => {
     }
   };
 
+  async function handleViewSampleTest() {
+
+    setLoading(true);
+    setShowConfirmModal(true);
+
+    await axios.get(`https://crackit-01.onrender.com/question/getList?topic=sample-test`)
+    .then(res => {
+      //console.log('Fetched Test Data:', res.data.questions[0]);
+      setSelectedTest(res.data.questions[0]);
+      setError(null);
+      setLoading(false);
+      /*console.log('Test ID:', selectedTest._id);
+      console.log('Test Name:', selectedTest.testName);
+      console.log('Test Topic:', selectedTest.topic);
+      console.log('Test Difficulty:', selectedTest.difficulty);*/
+
+    })
+    .catch(err => {
+      console.error(err);
+      setLoading(false);
+
+      if (err.response && err.response.status === 404) {
+        setError('No tests available for this topic yet.');
+      } else {
+        setError('Failed to load tests.');
+      }
+    });
+  }
+
+    const confirmStartTest = () => {
+    setShowConfirmModal(false);
+    // Navigate to TestPage.jsx with test data
+    /*console.log('Test ID:', selectedTest._id);
+    console.log('Test Name:', selectedTest.testName);
+    console.log('Test Topic:', selectedTest.topic);
+    console.log('Test Difficulty:', selectedTest.difficulty);*/
+    navigate(`/aptitude-tests/guest/sampleTest`, {
+      state: {
+        testId: selectedTest._id,
+        testName: selectedTest.testName,
+        topic: selectedTest.topic,
+        difficulty: selectedTest.difficulty
+      }
+    });
+  };
+
+  const cancelStartTest = () => {
+    setShowConfirmModal(false);
+    setSelectedTest(null);
+  };
+
+
   return (
     <>
-      <ComingSoonModal show={showCSoonModal} onHide={() => setShowCSoonModal(false)} /> 
-      {/* First Section: User Testimonials 
-      <section className="py-5 bg-light">
-        <div className="container px-4 px-md-5">
-          <div className="text-center mb-5">
-            <h2 className="fw-bold display-6 text-dark mb-3">What Our Users Say</h2>
-            <p className="fs-4 text-muted">Success stories from our community</p>
+      <ComingSoonModal show={showCSoonModal} onHide={() => setShowCSoonModal(false)} />
+        
+      {/* Confirmation Modal */}
+      <Modal show={showConfirmModal} onHide={cancelStartTest} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Start Test Confirmation</Modal.Title>
+        </Modal.Header>
+        {loading ? (
+          <div className="text-center py-5">
+            <Spinner animation="border" variant="primary" />
           </div>
-
-          <div className="row g-4">
-            {testimonials.map((user, i) => (
-              <div className="col-md-4" key={i}>
-                <div className="bg-white p-4 p-md-5 rounded-4 shadow-sm h-100">
-                  <div className="d-flex align-items-center mb-3">
-                    <img
-                      src={user.image}
-                      alt={user.name}
-                      width="48"
-                      height="48"
-                      className="rounded-circle object-fit-cover me-3"
-                      style={{ objectFit: 'cover', width: '48px', height: '48px' }}
-                    />
-                    <div>
-                      <h5 className="fw-semibold text-dark mb-1">{user.name}</h5>
-                      <p className="text-muted mb-0 small">{user.role}</p>
-                    </div>
+        ) : (error ? (
+          <Modal.Body>
+            <div className="text-center py-5">
+                  <div className="mb-4">
+                    <i className="fa fa-exclamation-triangle fa-3x text-danger"></i>
                   </div>
-                  <div className="mb-3">
-                    <i className="ri-star-fill text-warning me-1"></i>
-                    <i className="ri-star-fill text-warning me-1"></i>
-                    <i className="ri-star-fill text-warning me-1"></i>
-                    <i className="ri-star-fill text-warning me-1"></i>
-                    <i className="ri-star-fill text-warning"></i>
-                  </div>
-                  <p className="text-muted fst-italic">"{user.text}"</p>
+                  <h4 className="text-muted mb-3">{error}</h4>
+                  <p className="text-muted">
+                    Please try again later.
+                  </p>
+                  <Button 
+                    variant="primary" 
+                    onClick={() => cancelStartTest()}
+                    className="mt-3"
+                  >
+                    Close
+                  </Button>
+                </div>
+          </Modal.Body>
+        ):(
+          <>
+            <Modal.Body>
+              <div>
+                <h5>Are you ready to start the test?</h5>
+                <hr />
+                <div className="mt-3">
+                  <h6>Test Details:</h6>
+                  <ul className="text-muted">
+                    <li>Category: General</li>
+                    <li>Difficulty Level: Medium</li>
+                    <li>Total Questions: 10</li>
+                    <li>Time Allotted: 15 minutes</li>
+                    <li>Marking Scheme: -0.5 penalty for each incorrect answer</li>
+                    <li>Recommended For: Beginner-Intermediate level candidates with prior exposure</li>
+                  </ul>
+                </div>
+                <div className="alert alert-warning mt-3">
+                  <strong>Important:</strong> Once you start the test, the timer will begin immediately. Make sure you're ready!
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>*/}
-      {/* Second Section: CTA (Call-To-Action) */}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={cancelStartTest}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={confirmStartTest}>
+                Yes, Start Test
+              </Button>
+            </Modal.Footer>
+          </>
+        ))}
+      </Modal> 
+
       <section className="py-5 call-to-action text-white text-center">
         <div className="container px-4 px-sm-5">
           <h2 className="display-5 fw-bold mb-4 text-white">Ready to Discover Your Potential?</h2>
@@ -94,7 +154,7 @@ const Testimonials = () => {
           <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center mb-5">
             <button className="btn btn-light text-primary px-4 py-3 fs-5 rounded-button hover-scale" onClick={handlestartTest}>Start Your Test</button>
 
-            <button className="btn btn-outline-light px-4 py-3 fs-5 rounded-button" onClick={() => setShowCSoonModal(true)}>View Sample Questions</button>
+            <button className="btn btn-outline-light px-4 py-3 fs-5 rounded-button" onClick={() => handleViewSampleTest()}>View Sample Test</button>
           </div>
           <div className="row g-4 text-center">
             <div className="col-md-4">
